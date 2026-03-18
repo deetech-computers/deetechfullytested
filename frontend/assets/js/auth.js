@@ -74,7 +74,7 @@ const clearToken = () => localStorage.removeItem("token");
         </a>
         <a class="mobile-bottom-nav__item is-center" data-route="cart" href="${basePrefix}cart.html">
           <span class="mobile-bottom-nav__icon" aria-hidden="true">
-            <img src="${basePrefix}assets/img/icons/cart.png" alt="" />
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h2l2.2 9.2a1 1 0 0 0 1 .8H18a1 1 0 0 0 1-.76L21 8H8"></path><circle cx="10" cy="19" r="1.6"></circle><circle cx="17" cy="19" r="1.6"></circle></svg>
           </span>
           <span>Cart</span>
           <span class="mobile-bottom-nav__badge is-hidden" id="mobileBottomNavBadge">0</span>
@@ -189,7 +189,7 @@ const clearToken = () => localStorage.removeItem("token");
             </a>
 
             <a class="nav-icon cart-link" href="${basePrefix}cart.html" aria-label="Cart">
-              <img class="icon-img" src="${basePrefix}assets/img/icons/cart.png" alt="" />
+              <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h2l2.2 9.2a1 1 0 0 0 1 .8H18a1 1 0 0 0 1-.76L21 8H8"></path><circle cx="10" cy="19" r="1.6"></circle><circle cx="17" cy="19" r="1.6"></circle></svg>
               <span class="icon-badge" id="cartCount">0</span>
             </a>
 
@@ -211,7 +211,7 @@ const clearToken = () => localStorage.removeItem("token");
             </a>
 
             <button class="mobile-hamburger" aria-label="Menu">
-              <img class="icon-img" src="${basePrefix}assets/img/icons/menu.png" alt="" />
+              <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg>
             </button>
           </div>
 
@@ -221,7 +221,7 @@ const clearToken = () => localStorage.removeItem("token");
               <img class="icon-img" src="${basePrefix}assets/img/icons/search.png" alt="" />
             </button>` : ""}
             <button class="mobile-hamburger" aria-label="Menu">
-              <img class="icon-img" src="${basePrefix}assets/img/icons/menu.png" alt="" />
+              <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg>
             </button>
           </div>
         </div>
@@ -912,4 +912,5 @@ function guardProtected() {
   // Keep global fallback for non-module scripts
   window.auth = { getUser, setUser, clearUser, getToken, setToken, clearToken };
 })();
+
 
