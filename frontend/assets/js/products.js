@@ -9,11 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const SNAPSHOT_PATH = "assets/data/products-snapshot.json";
   const PLACEHOLDER_IMAGE = "assets/img/placeholder.svg";
   const SNAPSHOT_STORAGE_KEY = "deetech_products_snapshot_v1";
-  const API_TIMEOUT_MS = 1800;
+  const API_TIMEOUT_MS = 5000;
   const CAN_FETCH_LOCAL_SNAPSHOT = window.location.protocol === "http:" || window.location.protocol === "https:";
   let offlineNoticeShown = false;
 
   function showOfflineModeNotice() {
+    if (navigator.onLine !== false) return;
     if (offlineNoticeShown) return;
     offlineNoticeShown = true;
     const msg = "Offline mode: showing cached products";
@@ -1119,5 +1120,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   init();
 });
+
+
 
 

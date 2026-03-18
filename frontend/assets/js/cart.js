@@ -14,6 +14,7 @@
   let offlineNoticeShown = false;
 
   function showOfflineModeNotice() {
+    if (navigator.onLine !== false) return;
     if (offlineNoticeShown) return;
     offlineNoticeShown = true;
     const msg = "Offline mode: showing cached products";
@@ -694,6 +695,8 @@
     clearCart: clearCartFully,
   };
 })();
+
+
 
 
 
