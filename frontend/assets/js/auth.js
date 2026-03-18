@@ -231,7 +231,7 @@ const clearToken = () => localStorage.removeItem("token");
           <div class="search-container search-container-pill">
             <div class="search-input-wrapper pill-input">
               <input id="searchInput" class="search-input" type="text" placeholder="Search" />
-              <button id="searchClear" class="search-clear-btn" type="button" aria-label="Clear search">×</button>
+              <button id="searchClear" class="search-clear-btn" type="button" aria-label="Clear search">&times;</button>
               <button id="searchGo" class="search-icon-btn" type="button" aria-label="Search">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <circle cx="11" cy="11" r="7" />
@@ -239,7 +239,7 @@ const clearToken = () => localStorage.removeItem("token");
                 </svg>
               </button>
             </div>
-            <button id="searchClose" class="search-close-x" type="button" aria-label="Close search">×</button>
+            <button id="searchClose" class="search-close-x" type="button" aria-label="Close search">&times;</button>
           </div>
           <div class="search-suggestions-panel" id="searchSuggestionsPanel">
             <div class="search-suggestions-section" id="searchSuggestionsBlock">
@@ -912,3 +912,4 @@ function guardProtected() {
   // Keep global fallback for non-module scripts
   window.auth = { getUser, setUser, clearUser, getToken, setToken, clearToken };
 })();
+
