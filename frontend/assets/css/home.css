@@ -544,13 +544,14 @@ body {
 
   .home-product-section .product-name {
     font-size: 0.72rem;
-    line-height: 1.28;
+    line-height: 1.22;
     font-weight: 500;
-    min-height: 2.8em;
+    min-height: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin-bottom: 0.02rem;
   }
   .home-product-section .product-desc,
   .home-product-section .product-divider {
