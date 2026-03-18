@@ -1,5 +1,16 @@
 (function () {
   const { API_BASE, BASE_URL, showToast } = window.CONFIG || {};
+  const API_TIMEOUT_MS = 8000;
+
+  async function fetchWithTimeout(resource, options = {}, timeoutMs = API_TIMEOUT_MS) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      return await fetch(resource, { ...options, signal: controller.signal });
+    } finally {
+      clearTimeout(timer);
+    }
+  }
 
   function ensureAdminConfirmStyles() {
     if (document.getElementById("adminConfirmStyles")) return;
@@ -120,7 +131,7 @@
     const token = window.auth?.getToken?.();
     if (token && API_BASE) {
       try {
-        const res = await fetch(`${API_BASE}/users/profile`, {
+        const res = await fetchWithTimeout(`${API_BASE}/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
@@ -135,7 +146,21 @@
             if (user.role === "admin") return true;
           }
         }
-      } catch {}
+
+        if (res.status === 401 || res.status === 403) {
+          window.location.href = "../login.html";
+          return false;
+        }
+      } catch (err) {
+        const msg =
+          err?.name === "AbortError"
+            ? "Admin verification is taking too long. Please try again."
+            : navigator.onLine === false
+              ? "You appear to be offline. Reconnect to access the admin area."
+              : "Could not verify your admin session right now. Please try again.";
+        if (showToast) showToast(msg, "error");
+        return false;
+      }
     }
 
     window.location.href = "../login.html";
@@ -151,7 +176,20 @@
     }
     if (token) headers["Authorization"] = `Bearer ${token}`;
 
-    const res = await fetch(url, { ...options, headers });
+    let res;
+    try {
+      res = await fetchWithTimeout(url, { ...options, headers });
+    } catch (err) {
+      const msg =
+        err?.name === "AbortError"
+          ? "Request timed out. Render may be waking up. Please try again."
+          : navigator.onLine === false
+            ? "You appear to be offline. Please reconnect and try again."
+            : "Could not reach the server right now. Please try again.";
+      if (showToast) showToast(msg, "error");
+      throw new Error(msg);
+    }
+
     const text = await res.text();
     let data = {};
     try {
