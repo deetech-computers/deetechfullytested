@@ -122,14 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
     accessories: "Accessories",
     storage: "Storage Devices",
     printers: "Printers & Scanners",
-    samsung: "Samsung Products",
-    hp: "HP Products",
-    lg: "LG Products",
-    it: "IT & Networking",
-    home: "Home Appliances",
-    small: "Small Appliances",
-    more: "More Tech Categories",
-    ramadan: "Ramadan Offers",
   };
 
   const categoryBrands = {
