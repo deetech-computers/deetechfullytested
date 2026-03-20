@@ -3,7 +3,7 @@
   display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
   gap:28px;padding:36px 0;
 }
-.footer h4{color:#fff;margin-bottom:8px}
+.footer h3{color:#fff;margin-bottom:8px}
 .footer a{color:#e5e7eb}
 .footer a:hover{color:#ffcc00}
 .copyright{text-align:center;border-top:1px solid #1f2937;padding:12px 0;color:#9ca3af}
@@ -37,5 +37,16 @@
 }
 .footer-social-list a:hover .footer-social-icon{
   color:#ffcc00;
+}
+.sr-only{
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  margin:-1px;
+  overflow:hidden;
+  clip:rect(0, 0, 0, 0);
+  white-space:nowrap;
+  border:0;
 }
 
