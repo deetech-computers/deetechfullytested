@@ -1,3 +1,4 @@
+localStorage.removeItem("orderSent");
 document.addEventListener("DOMContentLoaded", () => {
   const order = JSON.parse(localStorage.getItem("lastOrder"));
   const summaryEl = document.getElementById("thankyouSummary");
