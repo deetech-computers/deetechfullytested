@@ -502,7 +502,7 @@
       .map((cat) => {
         const img = cat.image;
         return `
-          <a class="category-bubble" href="products.html?cat=${encodeURIComponent(cat.label)}">
+          <a class="category-bubble" href="products.html?category=${encodeURIComponent(canonicalCategory(cat.label))}">
             <span class="bubble-media"><img src="${img}" alt="${cat.label}" width="220" height="220" loading="lazy" decoding="async"></span>
             <span class="bubble-label">${cat.label}</span>
           </a>

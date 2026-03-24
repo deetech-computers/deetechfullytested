@@ -237,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!link.dataset.cat) return;
       link.addEventListener("click", (e) => {
         e.preventDefault();
-        window.location.href = `products.html?cat=${encodeURIComponent(link.dataset.cat.trim())}`;
+        window.location.href = `products.html?category=${encodeURIComponent(String(link.dataset.cat || "").trim().toLowerCase())}`;
       });
     });
   }

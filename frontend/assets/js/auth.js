@@ -737,7 +737,7 @@ const clearToken = () => localStorage.removeItem("token");
         const label = categoryLabels[key] || key;
         const icon = categoryIconMap[key] || categoryIconMap.other;
         return `
-          <a class="mobile-menu-tile" href="${basePrefix}products.html?cat=${encodeURIComponent(key)}">
+          <a class="mobile-menu-tile" href="${basePrefix}products.html?category=${encodeURIComponent(key)}">
             <img src="${icon}" alt="${label}" width="24" height="24" loading="lazy" decoding="async" />
             <span>${label}</span>
           </a>
