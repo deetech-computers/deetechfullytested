@@ -4,7 +4,7 @@
   const host = document.getElementById("heroBanner");
   if (!host || !API_BASE) return;
   const BANNER_STORAGE_KEY = "deetech_banners_cache_v1";
-  const API_TIMEOUT_MS = 4000;
+  const API_TIMEOUT_MS = 2500;
   let currentIndex = 0;
   let slides = [];
   let autoSlideTimer = null;
@@ -38,6 +38,7 @@
     image.width = 1600;
     image.height = 600;
     image.decoding = "async";
+    image.loading = "eager";
     image.fetchPriority = "high";
 
     const overlay = document.createElement("div");
@@ -158,6 +159,16 @@
       }
       renderFallbackBanner();
     }
+  }
+
+  const cachedBanners = readBannerCache().filter((b) => !!resolveImage(b?.imageUrl));
+  if (cachedBanners.length) {
+    slides = cachedBanners;
+    currentIndex = 0;
+    renderBanner(currentIndex);
+    startAutoSlide();
+  } else {
+    renderFallbackBanner();
   }
 
   loadBanner();
