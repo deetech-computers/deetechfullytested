@@ -441,6 +441,29 @@
   box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
 }
 
+.review-form-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.review-form-head h3 {
+  margin: 0;
+}
+
+.review-toggle-btn {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.review-composer {
+  margin-top: 8px;
+}
+
 .review-form-wrap h3 {
   margin: 0 0 8px;
   font-size: 1.05rem;
@@ -1209,5 +1232,3 @@
     min-width: 0;
   }
 }
-
-

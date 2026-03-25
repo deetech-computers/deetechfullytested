@@ -289,6 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const reviewsListEl = document.getElementById("reviewsList");
     const reviewsSummaryEl = document.getElementById("reviewsSummary");
     const reviewFormWrapEl = document.getElementById("reviewFormWrap");
+    const reviewComposerEl = document.getElementById("reviewComposer");
+    const reviewToggleBtnEl = document.getElementById("reviewToggleBtn");
     const reviewFormEl = document.getElementById("reviewForm");
     const reviewAuthHintEl = document.getElementById("reviewAuthHint");
     const myReviewPreviewEl = document.getElementById("myReviewPreview");
@@ -329,6 +331,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (reviewRatingTextEl) {
         reviewRatingTextEl.textContent = ratingLabels[rating] || "Select rating";
       }
+    }
+
+    let hasExistingReview = false;
+
+    function setComposerOpen(isOpen) {
+      if (!reviewComposerEl || !reviewToggleBtnEl) return;
+      reviewComposerEl.classList.toggle("hidden", !isOpen);
+      reviewToggleBtnEl.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      reviewToggleBtnEl.textContent = isOpen ? "Close" : (hasExistingReview ? "Update Your Review" : "Write a Review");
     }
 
     let localImageUrl = "";
@@ -392,19 +403,26 @@ document.addEventListener("DOMContentLoaded", () => {
     const avg = count ? reviews.reduce((sum, r) => sum + Number(r.rating || 0), 0) / count : 0;
     if (prodRatingEl) prodRatingEl.textContent = starsFromRating(Math.round(avg || 0));
     if (prodReviewsEl) prodReviewsEl.textContent = `(${count} reviews)`;
-    if (reviewsSummaryEl) reviewsSummaryEl.textContent = count ? `${avg.toFixed(1)} / 5 • ${count} reviews` : "No reviews yet";
-
+    if (reviewsSummaryEl) reviewsSummaryEl.textContent = count ? `${avg.toFixed(1)} / 5 - ${count} reviews` : "No reviews yet";
     if (!token) {
+      hasExistingReview = false;
+      reviewToggleBtnEl?.classList.add("hidden");
       reviewFormEl.classList.add("hidden");
-      myReviewPreviewEl?.classList.add("hidden");
-      reviewAuthHintEl?.classList.remove("hidden");
-      if (reviewAuthHintEl) reviewAuthHintEl.innerHTML = 'Sign in to leave a review. <a href="login.html">Login</a>';
+      reviewAuthHintEl?.classList.add("hidden");
+      if (reviewFormTitleEl) reviewFormTitleEl.textContent = "Sign in to review";
+      if (myReviewPreviewEl) {
+        myReviewPreviewEl.classList.remove("hidden");
+        myReviewPreviewEl.innerHTML = '<p class="my-review-comment">Sign in to leave a review. <a href="login.html">Login</a></p>';
+      }
       clearImagePreview();
+      setComposerOpen(false);
     } else {
+      reviewToggleBtnEl?.classList.remove("hidden");
       reviewAuthHintEl?.classList.add("hidden");
       const hasReview = Boolean(myReview?._id);
+      hasExistingReview = hasReview;
       reviewFormEl.classList.toggle("hidden", hasReview);
-      if (reviewFormTitleEl) reviewFormTitleEl.textContent = hasReview ? "Update Your Review" : "Write a Review";
+      if (reviewFormTitleEl) reviewFormTitleEl.textContent = hasReview ? "Your Review" : "Rate Our Product";
       if (reviewSubmitBtnEl) reviewSubmitBtnEl.textContent = hasReview ? "Update Review" : "Submit Review";
       if (reviewCancelEditBtnEl) reviewCancelEditBtnEl.classList.toggle("hidden", !hasReview);
       setRatingUI(hasReview ? Number(myReview.rating || 0) : 0);
@@ -431,6 +449,7 @@ document.addEventListener("DOMContentLoaded", () => {
           document.getElementById("showReviewEditBtn")?.addEventListener("click", () => {
             reviewFormEl.classList.remove("hidden");
             myReviewPreviewEl.classList.add("hidden");
+            setComposerOpen(true);
           });
         } else {
           myReviewPreviewEl.classList.add("hidden");
@@ -438,7 +457,17 @@ document.addEventListener("DOMContentLoaded", () => {
           setRatingUI(0);
         }
       }
+      setComposerOpen(false);
     }
+
+    reviewToggleBtnEl?.addEventListener("click", () => {
+      const isOpen = !reviewComposerEl?.classList.contains("hidden");
+      if (token && hasExistingReview) {
+        reviewFormEl.classList.remove("hidden");
+        myReviewPreviewEl?.classList.add("hidden");
+      }
+      setComposerOpen(!isOpen);
+    });
 
     reviewImagePickerEl?.addEventListener("click", () => reviewImageEl?.click());
     reviewImagePickerEl?.addEventListener("keydown", (e) => {
@@ -555,6 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
       reviewCancelEditBtnEl.onclick = () => {
         reviewFormEl.classList.add("hidden");
         if (myReview?._id && myReviewPreviewEl) myReviewPreviewEl.classList.remove("hidden");
+        setComposerOpen(false);
       };
     }
 
@@ -923,11 +953,3 @@ document.addEventListener("DOMContentLoaded", () => {
   wireTabs();
   if (productId) loadProduct();
 });
-
-
-
-
-
-
-
-

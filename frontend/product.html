@@ -112,35 +112,40 @@
             </div>
 
             <div class="review-form-wrap" id="reviewFormWrap">
-              <h3 id="reviewFormTitle">Write a Review</h3>
-              <p class="review-form-hint" id="reviewAuthHint">Sign in to leave a review.</p>
+              <div class="review-form-head">
+                <h3 id="reviewFormTitle">Rate Our Product</h3>
+                <button type="button" class="btn btn-outline review-toggle-btn" id="reviewToggleBtn" aria-expanded="false" aria-controls="reviewComposer">Write a Review</button>
+              </div>
               <div id="myReviewPreview" class="my-review-preview hidden"></div>
-              <form id="reviewForm" class="review-form hidden" enctype="multipart/form-data">
-                <div class="review-form-row">
-                  <label>Rating *</label>
-                  <input type="hidden" id="reviewRating" name="rating" value="" required>
-                  <div id="reviewStarsInput" class="review-stars-input" role="radiogroup" aria-label="Choose rating">
-                    <button type="button" class="review-star-btn" data-value="1" aria-label="1 star">&#9733;</button>
-                    <button type="button" class="review-star-btn" data-value="2" aria-label="2 stars">&#9733;</button>
-                    <button type="button" class="review-star-btn" data-value="3" aria-label="3 stars">&#9733;</button>
-                    <button type="button" class="review-star-btn" data-value="4" aria-label="4 stars">&#9733;</button>
-                    <button type="button" class="review-star-btn" data-value="5" aria-label="5 stars">&#9733;</button>
+              <div id="reviewComposer" class="review-composer hidden">
+                <p class="review-form-hint" id="reviewAuthHint">Sign in to leave a review.</p>
+                <form id="reviewForm" class="review-form hidden" enctype="multipart/form-data">
+                  <div class="review-form-row">
+                    <label>Rating *</label>
+                    <input type="hidden" id="reviewRating" name="rating" value="" required>
+                    <div id="reviewStarsInput" class="review-stars-input" role="radiogroup" aria-label="Choose rating">
+                      <button type="button" class="review-star-btn" data-value="1" aria-label="1 star">&#9733;</button>
+                      <button type="button" class="review-star-btn" data-value="2" aria-label="2 stars">&#9733;</button>
+                      <button type="button" class="review-star-btn" data-value="3" aria-label="3 stars">&#9733;</button>
+                      <button type="button" class="review-star-btn" data-value="4" aria-label="4 stars">&#9733;</button>
+                      <button type="button" class="review-star-btn" data-value="5" aria-label="5 stars">&#9733;</button>
+                    </div>
+                    <small id="reviewRatingText" class="review-rating-text">Select rating</small>
                   </div>
-                  <small id="reviewRatingText" class="review-rating-text">Select rating</small>
-                </div>
-                <div class="review-form-row">
-                  <label for="reviewTitle">Title *</label>
-                  <input id="reviewTitle" name="title" type="text" maxlength="150" placeholder="Title" required>
-                </div>
-                <div class="review-form-row">
-                  <label for="reviewComment">Comment *</label>
-                  <textarea id="reviewComment" name="comment" rows="7" maxlength="1000" placeholder="Comment" required></textarea>
-                </div>
-                <div class="review-form-actions">
-                  <button type="submit" class="btn" id="reviewSubmitBtn">Submit Review</button>
-                  <button type="button" class="btn btn-outline hidden" id="reviewCancelEditBtn">Cancel</button>
-                </div>
-              </form>
+                  <div class="review-form-row">
+                    <label for="reviewTitle">Title *</label>
+                    <input id="reviewTitle" name="title" type="text" maxlength="150" placeholder="Title" required>
+                  </div>
+                  <div class="review-form-row">
+                    <label for="reviewComment">Comment *</label>
+                    <textarea id="reviewComment" name="comment" rows="7" maxlength="1000" placeholder="Comment" required></textarea>
+                  </div>
+                  <div class="review-form-actions">
+                    <button type="submit" class="btn" id="reviewSubmitBtn">Submit Review</button>
+                    <button type="button" class="btn btn-outline hidden" id="reviewCancelEditBtn">Cancel</button>
+                  </div>
+                </form>
+              </div>
             </div>
 
             <div id="reviewsList" class="reviews-list"></div>
@@ -247,31 +252,6 @@
   <script src="assets/js/auth.js"></script>
   <script src="assets/js/cart.js"></script>
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/product.js?v=20260325-02"></script>
+  <script src="assets/js/product.js?v=20260325-03"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
