@@ -761,16 +761,14 @@ document.addEventListener("DOMContentLoaded", () => {
         relatedGrid.innerHTML = "";
         if (!related.length) {
           relatedGrid.innerHTML = '<p class="related-empty">No related product found.</p>';
-          return;
-        }
-
-        related.forEach((r) => {
-          const rStock = getStock(r);
-          const rDesc = String(r.short_description || r.description || "").trim();
-          const shortDesc = rDesc.length > 80 ? `${rDesc.slice(0, 77)}...` : rDesc;
-          const card = document.createElement("div");
-          card.className = "product-card";
-          card.innerHTML = `
+        } else {
+          related.forEach((r) => {
+            const rStock = getStock(r);
+            const rDesc = String(r.short_description || r.description || "").trim();
+            const shortDesc = rDesc.length > 80 ? `${rDesc.slice(0, 77)}...` : rDesc;
+            const card = document.createElement("div");
+            card.className = "product-card";
+            card.innerHTML = `
             <div class="product-media">
               ${r.featured ? '<div class="media-badge">FEATURED</div>' : ""}
               <a href="product.html?id=${encodeURIComponent(r._id)}">
@@ -789,16 +787,17 @@ document.addEventListener("DOMContentLoaded", () => {
               <a href="product.html?id=${encodeURIComponent(r._id)}" class="view-details-link">View Details</a>
             </div>
           `;
-          relatedGrid.appendChild(card);
-          setAdaptiveImageFit(card.querySelector("img"));
-        });
+            relatedGrid.appendChild(card);
+            setAdaptiveImageFit(card.querySelector("img"));
+          });
 
-        relatedGrid.addEventListener("click", (ev) => {
-          const addBtn = ev.target.closest(".add-to-cart");
-          if (!addBtn) return;
-          const prod = related.find((p) => String(p._id) === String(addBtn.dataset.id));
-          if (prod) addToCart(prod);
-        });
+          relatedGrid.addEventListener("click", (ev) => {
+            const addBtn = ev.target.closest(".add-to-cart");
+            if (!addBtn) return;
+            const prod = related.find((p) => String(p._id) === String(addBtn.dataset.id));
+            if (prod) addToCart(prod);
+          });
+        }
       }
 
       await loadReviewsForProduct(product);
@@ -836,7 +835,6 @@ document.addEventListener("DOMContentLoaded", () => {
   wireTabs();
   if (productId) loadProduct();
 });
-
 
 
 
