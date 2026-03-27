@@ -96,6 +96,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     return `GHC ${Number(v || 0).toFixed(2)}`;
   }
 
+  function hydrateProfileFromUser(user) {
+    if (!user || typeof user !== "object") return false;
+    const fullName = String(user.name || "").trim();
+    const first = user.firstName || fullName.split(/\s+/)[0] || "";
+    const last = user.lastName || fullName.split(/\s+/).slice(1).join(" ") || "";
+
+    if (firstNameInput) firstNameInput.value = first;
+    if (lastNameInput) lastNameInput.value = last;
+    if (emailInput) emailInput.value = user.email || "";
+    if (accountSidebarName) accountSidebarName.textContent = `Hello! ${first || user.firstName || "Customer"}`;
+    if (accountSidebarEmail) accountSidebarEmail.textContent = user.email || "guest@deetech.com";
+    if (phoneInput) phoneInput.value = user.phone || "";
+    if (addressInput) addressInput.value = user.address || "";
+    if (regionInput) regionInput.value = user.region || "";
+    if (cityInput) cityInput.value = user.city || "";
+    if (welcomeName) welcomeName.textContent = first || user.name || "Customer";
+
+    if (adminBadge) adminBadge.style.display = user.role === "admin" ? "inline-flex" : "none";
+    if (roleBadge) {
+      roleBadge.style.display = user.role === "admin" ? "none" : "inline-flex";
+      roleBadge.textContent = user.role === "admin" ? "Admin" : "Member";
+    }
+
+    profileSnapshot = captureProfileSnapshot();
+    setProfileEditMode(true);
+    return true;
+  }
+
   function setMessage(text, type = "info") {
     if (!messageEl) return;
     messageEl.textContent = text || "";
@@ -325,7 +353,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function loadMyReviews() {
     try {
       const token = typeof getToken === "function" ? getToken() : null;
+      const localUser = typeof getUser === "function" ? getUser() : null;
       if (!token) {
+        if (hydrateProfileFromUser(localUser)) return;
         if (isOffline()) {
           if (reviewsList) {
             reviewsList.innerHTML = "<div class='account-reviews-note'>You're offline. Sign in when online to load your reviews.</div>";
@@ -450,13 +480,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function loadAccountInfo() {
     try {
       const token = typeof getToken === "function" ? getToken() : null;
+      const localUser = typeof getUser === "function" ? getUser() : null;
       if (!token) {
+        if (hydrateProfileFromUser(localUser)) return;
         if (isOffline()) {
           setMessage("You're offline. Connect and sign in to load account details.", "error");
           return;
         }
         showToast?.("Please sign in to access your account.", "info");
         return;
+      }
+
+      if (!API_BASE_USERS) {
+        if (hydrateProfileFromUser(localUser)) return;
+        throw new Error("Users API base is not configured");
       }
 
       const res = await fetch(`${API_BASE_USERS}/profile`, {
@@ -525,6 +562,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     } catch (err) {
       console.error("Account fetch error:", err.message);
+      const fallbackUser = typeof getUser === "function" ? getUser() : null;
+      if (hydrateProfileFromUser(fallbackUser)) {
+        setMessage("Live account refresh failed. Showing saved profile data.", "info");
+        return;
+      }
       setMessage("Unable to load account info. Please log in again.", "error");
     }
   }
@@ -628,6 +670,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
+      if (!API_BASE_USERS) {
+        throw new Error("Users API base is not configured");
+      }
+
       const res = await fetch(`${API_BASE_USERS}/profile`, {
         method: "PUT",
         headers: {
@@ -790,6 +836,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadAccountInfo();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
