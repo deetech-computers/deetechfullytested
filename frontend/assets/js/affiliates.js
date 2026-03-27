@@ -294,13 +294,19 @@
   }
 
   async function copyCode() {
+    const notify = (message, type = "info") => {
+      if (typeof window?.CONFIG?.showToast === "function") return window.CONFIG.showToast(message, type);
+      if (typeof window?.showToast === "function") return window.showToast(message, type);
+      console.log(`[${String(type).toUpperCase()}] ${message}`);
+    };
+
     const codeFromState = text(currentCode);
     const codeFromData = text(els.copyCodeBtn?.dataset?.code || "");
     const codeFromUi = text(els.codeValue?.textContent || "");
     const code = [codeFromState, codeFromData, codeFromUi].find((v) => v && v !== "-") || "";
 
     if (!code) {
-      showToast?.("Affiliate code is not available yet.", "info");
+      notify("Affiliate code is not available yet.", "info");
       return;
     }
 
@@ -316,10 +322,10 @@
         document.body.removeChild(input);
         if (!ok) throw new Error("copy-command-failed");
       }
-      showToast?.("Affiliate code copied", "success");
+      notify("Affiliate code copied", "success");
     } catch (error) {
       console.error(error);
-      showToast?.("Could not copy code", "error");
+      notify("Could not copy code", "error");
     }
   }
 

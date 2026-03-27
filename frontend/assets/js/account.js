@@ -483,13 +483,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function copyAffiliateCode() {
+    const notify = (message, type = "info") => {
+      if (typeof window?.CONFIG?.showToast === "function") return window.CONFIG.showToast(message, type);
+      if (typeof window?.showToast === "function") return window.showToast(message, type);
+      console.log(`[${String(type).toUpperCase()}] ${message}`);
+    };
+
     const codeFromData = String(affiliateCopyCodeBtn?.dataset?.code || "").trim();
     const codeFromState = String(currentAffiliateCode || "").trim();
     const codeFromUi = String(affiliateCodeEl?.textContent || "").trim();
     const code = [codeFromData, codeFromState, codeFromUi].find((v) => v && v !== "-") || "";
 
     if (!code) {
-      showToast?.("Affiliate code is not available yet.", "info");
+      notify("Affiliate code is not available yet.", "info");
       return;
     }
 
@@ -501,13 +507,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         input.value = code;
         document.body.appendChild(input);
         input.select();
-        document.execCommand("copy");
+        const ok = document.execCommand("copy");
         document.body.removeChild(input);
+        if (!ok) throw new Error("copy-command-failed");
       }
-      showToast?.("Affiliate code copied", "success");
+      notify("Affiliate code copied", "success");
     } catch (error) {
       console.error("Copy affiliate code error:", error);
-      showToast?.("Could not copy code", "error");
+      notify("Could not copy code", "error");
     }
   }
   async function handleProfileSave(e) {
