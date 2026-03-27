@@ -2096,6 +2096,12 @@ body.account-page-leaving .account-page {
   margin-bottom: 0.7rem;
 }
 
+@media (max-width: 1023px) {
+  .account-header-nav {
+    display: flex !important;
+  }
+}
+
 @media (min-width: 1024px) {
   .account-header-nav {
     display: none !important;
