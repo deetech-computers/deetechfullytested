@@ -1,4 +1,4 @@
-// assets/js/product.js
+﻿// assets/js/product.js
 document.addEventListener("DOMContentLoaded", () => {
   const { API_BASE_PRODUCTS, BASE_URL, loadCart, saveCart, showToast } = window.CONFIG || {};
   const SNAPSHOT_PATH = "assets/data/products-snapshot.json";
@@ -268,6 +268,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const tabButtons = Array.from(document.querySelectorAll(".prod-tab-btn"));
     const panes = Array.from(document.querySelectorAll(".prod-tab-pane"));
     if (!tabButtons.length || !panes.length) return;
+
+    const activateTab = (tabName) => {
+      if (!tabName) return;
+      const targetBtn = tabButtons.find((b) => String(b.dataset.tab || "").toLowerCase() === String(tabName).toLowerCase());
+      if (!targetBtn) return;
+      targetBtn.click();
+    };
+
     tabButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const tab = btn.dataset.tab;
@@ -283,6 +291,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
     });
+
+    const params = new URLSearchParams(window.location.search);
+    const tabFromQuery = String(params.get("tab") || "").trim().toLowerCase();
+    const hash = String(window.location.hash || "").trim().toLowerCase();
+    const wantsReviews = tabFromQuery === "reviews" || hash === "#productreviewssection";
+    if (wantsReviews) activateTab("reviews");
   }
 
   async function loadReviewsForProduct(product) {

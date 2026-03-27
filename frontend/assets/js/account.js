@@ -241,37 +241,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         return `
           <article class="account-review-card">
-            <div class="account-review-layout">
-              <a class="account-review-thumb-link" href="product.html?id=${encodeURIComponent(productId)}" aria-label="Open ${escapeHtml(productName)}">
-                <img class="account-review-thumb" src="${escapeHtml(reviewImage)}" alt="${escapeHtml(productName)} review image" width="120" height="120" loading="lazy" decoding="async">
-              </a>
-              <div class="account-review-main">
-                <div class="account-review-card-head">
-                  <div>
-                    <div class="account-review-product">${escapeHtml(productName)}</div>
-                    <div class="account-review-meta">${escapeHtml(reviewDateTime)}</div>
-                  </div>
-                  <div class="account-review-stars-text" aria-label="${Number(review.rating || 0)} out of 5 stars">${starsText(review.rating)}</div>
+            <a class="account-review-card-link" href="product.html?id=${encodeURIComponent(productId)}&tab=reviews#productReviewsSection" aria-label="Open reviews for ${escapeHtml(productName)}">
+              <div class="account-review-layout">
+                <div class="account-review-thumb-link">
+                  <img class="account-review-thumb" src="${escapeHtml(reviewImage)}" alt="${escapeHtml(productName)} review image" width="120" height="120" loading="lazy" decoding="async">
                 </div>
-                <p class="account-review-comment">${reviewComment}</p>
-                <div class="account-review-actions">
-                  <button type="button" class="btn account-review-edit-btn" data-review-id="${escapeHtml(review._id || "")}">Update Review</button>
-                  <a class="btn btn-outline" href="product.html?id=${encodeURIComponent(productId)}">Open Product</a>
+                <div class="account-review-main">
+                  <div class="account-review-card-head">
+                    <div>
+                      <div class="account-review-product">${escapeHtml(productName)}</div>
+                      <div class="account-review-meta">${escapeHtml(reviewDateTime)}</div>
+                    </div>
+                    <div class="account-review-stars-text" aria-label="${Number(review.rating || 0)} out of 5 stars">${starsText(review.rating)}</div>
+                  </div>
+                  <p class="account-review-comment">${reviewComment}</p>
                 </div>
               </div>
-            </div>
+            </a>
           </article>
         `;
       })
       .join("");
 
-    reviewsList.querySelectorAll(".account-review-edit-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const id = btn.getAttribute("data-review-id");
-        const review = reviewsCache.find((r) => String(r._id) === String(id));
-        showReviewEditor(review);
-      });
-    });
   }
   async function loadMyReviews() {
     try {
