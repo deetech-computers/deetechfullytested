@@ -96,7 +96,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     messageEl.style.color = type === "error" ? "#ef4444" : "#1e3a8a";
   }
 
+  function isMobileAccountView() {
+    return typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
+  }
+
   function showAccountMenu() {
+    if (!isMobileAccountView()) {
+      accountContent?.classList.remove("account-hidden");
+      sidebar?.classList.remove("account-hidden");
+      return;
+    }
+
     profileSection?.classList.add("account-hidden");
     reviewsSection?.classList.add("account-hidden");
     affiliateSection?.classList.add("account-hidden");
@@ -112,6 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function activateTab(tab) {
+
     profileSection?.classList.add("account-hidden");
     reviewsSection?.classList.add("account-hidden");
     affiliateSection?.classList.add("account-hidden");
@@ -120,8 +131,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     tabReviewsBtn?.classList.remove("account-active");
     tabAffiliateBtn?.classList.remove("account-active");
 
-    sidebar?.classList.add("account-hidden");
-    accountContent?.classList.remove("account-hidden");
+    if (isMobileAccountView()) {
+      sidebar?.classList.add("account-hidden");
+      accountContent?.classList.remove("account-hidden");
+    } else {
+      sidebar?.classList.remove("account-hidden");
+      accountContent?.classList.remove("account-hidden");
+    }
 
     if (tab === "reviews") {
       reviewsSection?.classList.remove("account-hidden");
@@ -596,7 +612,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (tabFromUrl === "reviews") activateTab("reviews");
   else if (tabFromUrl === "affiliate") activateTab("affiliate");
   else if (tabFromUrl === "profile") activateTab("profile");
-  else showAccountMenu();
+  else if (isMobileAccountView()) showAccountMenu();
+  else activateTab("profile");
+
+  window.addEventListener("resize", () => {
+    if (!isMobileAccountView()) {
+      sidebar?.classList.remove("account-hidden");
+      accountContent?.classList.remove("account-hidden");
+      if (
+        profileSection?.classList.contains("account-hidden") &&
+        reviewsSection?.classList.contains("account-hidden") &&
+        affiliateSection?.classList.contains("account-hidden")
+      ) {
+        activateTab("profile");
+      }
+    }
+  });
 
   loadAccountInfo();
 });
