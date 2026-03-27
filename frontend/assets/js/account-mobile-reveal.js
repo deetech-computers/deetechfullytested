@@ -4,6 +4,24 @@
     return typeof window !== "undefined" && window.matchMedia("(max-width: 1023px)").matches;
   }
 
+  let lastTapTs = 0;
+  function bindTapOnce(el, handler) {
+    if (!el) return;
+    const wrapped = (event) => {
+      const now = Date.now();
+      if (now - lastTapTs < 250) {
+        event.preventDefault();
+        return;
+      }
+      lastTapTs = now;
+      event.preventDefault();
+      event.stopPropagation();
+      handler();
+    };
+    el.addEventListener("pointerup", wrapped);
+    el.addEventListener("click", wrapped);
+  }
+
   function init() {
     const sidebar = document.querySelector(".account-layout .account-sidebar");
     const content = document.querySelector(".account-layout .account-content");
@@ -20,33 +38,27 @@
       }
       content.classList.add("account-hidden");
       sidebar.classList.remove("account-hidden");
-      sidebar.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
     const openContent = () => {
       content.classList.remove("account-hidden");
       if (isMobile()) {
         sidebar.classList.add("account-hidden");
-        content.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
         sidebar.classList.remove("account-hidden");
       }
     };
 
-    openCurrentBtn?.addEventListener("click", (event) => {
-      event.preventDefault();
-      openContent();
-    });
-
-    backBtn?.addEventListener("click", (event) => {
-      event.preventDefault();
-      showMenu();
-    });
+    bindTapOnce(openCurrentBtn, openContent);
+    bindTapOnce(backBtn, showMenu);
 
     if (isMobile()) {
       showMenu();
+      window.scrollTo({ top: 0, behavior: "auto" });
+      requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
     } else {
       openContent();
+      window.scrollTo({ top: 0, behavior: "auto" });
     }
 
     window.addEventListener("resize", () => {

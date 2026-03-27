@@ -118,10 +118,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     hideReviewEditor();
     accountContent?.classList.add("account-hidden");
     sidebar?.classList.remove("account-hidden");
-    sidebar?.scrollIntoView({ behavior: "smooth", block: "start" });
+    window.scrollTo({ top: 0, behavior: "auto" });
   }
 
-  function activateTab(tab) {
+  function activateTab(tab, options = {}) {
+    const shouldScroll = options.scroll !== false;
 
     profileSection?.classList.add("account-hidden");
     reviewsSection?.classList.add("account-hidden");
@@ -143,7 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       reviewsSection?.classList.remove("account-hidden");
       tabReviewsBtn?.classList.add("account-active");
       loadMyReviews();
-      reviewsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: "auto" });
       return;
     }
 
@@ -152,14 +153,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       tabAffiliateBtn?.classList.add("account-active");
       loadAffiliateSummary();
       hideReviewEditor();
-      affiliateSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (shouldScroll) window.scrollTo({ top: 0, behavior: "auto" });
       return;
     }
 
     profileSection?.classList.remove("account-hidden");
     tabProfileBtn?.classList.add("account-active");
     hideReviewEditor();
-    profileSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (shouldScroll) window.scrollTo({ top: 0, behavior: "auto" });
   }
 
   function setEditorRating(value) {
@@ -611,16 +612,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const tabFromUrl = new URLSearchParams(window.location.search).get("tab");
   if (isMobileAccountView()) {
     if (tabFromUrl === "reviews" || tabFromUrl === "affiliate" || tabFromUrl === "profile") {
-      activateTab(tabFromUrl);
+      activateTab(tabFromUrl, { scroll: false });
     } else {
       showAccountMenu();
     }
   } else if (tabFromUrl === "reviews") {
-    activateTab("reviews");
+    activateTab("reviews", { scroll: false });
   } else if (tabFromUrl === "affiliate") {
-    activateTab("affiliate");
+    activateTab("affiliate", { scroll: false });
   } else {
-    activateTab("profile");
+    activateTab("profile", { scroll: false });
   }
 
   window.addEventListener("resize", () => {
@@ -632,10 +633,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         reviewsSection?.classList.contains("account-hidden") &&
         affiliateSection?.classList.contains("account-hidden")
       ) {
-        activateTab("profile");
+        activateTab("profile", { scroll: false });
       }
     }
   });
+
+  window.scrollTo({ top: 0, behavior: "auto" });
+  requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
 
   loadAccountInfo();
 });
