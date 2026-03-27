@@ -1,3 +1,5 @@
+@import url("./admin-shared.css");
+
 .users-page {
   animation: admin-fadeIn 0.3s ease-out;
 }
@@ -361,3 +363,4 @@
     width: 100%;
   }
 }
+

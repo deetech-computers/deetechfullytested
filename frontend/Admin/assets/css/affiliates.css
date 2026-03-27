@@ -1,3 +1,5 @@
+@import url("./admin-shared.css");
+
 .affiliates-page {
   animation: admin-fadeIn 0.3s ease-out;
 }
@@ -325,3 +327,4 @@
     grid-template-columns: 1fr;
   }
 }
+

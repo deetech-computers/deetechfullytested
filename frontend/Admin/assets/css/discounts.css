@@ -1,3 +1,5 @@
+@import url("./admin-shared.css");
+
 .discounts-page {
   animation: admin-fadeIn 0.3s ease-out;
 }
@@ -138,3 +140,4 @@
     width: 100%;
   }
 }
+

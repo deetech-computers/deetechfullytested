@@ -123,7 +123,67 @@
       });
     } catch {}
   }
+  function enhanceAdminShell() {
+    const shell = document.querySelector(".admin-shell");
+    const nav = document.querySelector(".admin-nav");
+    const header = document.querySelector(".admin-header");
+    if (!shell || !nav || !header) return;
 
+    document.body.classList.add("admin-portal");
+
+    if (!nav.querySelector(".admin-brand")) {
+      const brand = document.createElement("div");
+      brand.className = "admin-brand";
+      brand.innerHTML = `
+        <a href="index.html" class="admin-brand-link" aria-label="Deetech Admin Dashboard">
+          <span class="admin-brand-mark">D</span>
+          <span class="admin-brand-text-wrap">
+            <span class="admin-brand-text">DEETECH</span>
+            <span class="admin-brand-subtext">Admin Portal</span>
+          </span>
+        </a>
+      `;
+      nav.prepend(brand);
+    }
+
+    if (!header.querySelector(".admin-nav-toggle")) {
+      const toggleBtn = document.createElement("button");
+      toggleBtn.type = "button";
+      toggleBtn.className = "admin-nav-toggle";
+      toggleBtn.setAttribute("aria-label", "Open admin menu");
+      toggleBtn.innerHTML = `
+        <span></span>
+        <span></span>
+        <span></span>
+      `;
+      header.prepend(toggleBtn);
+    }
+
+    let backdrop = document.querySelector(".admin-nav-backdrop");
+    if (!backdrop) {
+      backdrop = document.createElement("button");
+      backdrop.type = "button";
+      backdrop.className = "admin-nav-backdrop";
+      backdrop.setAttribute("aria-label", "Close admin menu");
+      document.body.appendChild(backdrop);
+    }
+
+    const closeNav = () => document.body.classList.remove("admin-nav-open");
+    const toggleNav = () => document.body.classList.toggle("admin-nav-open");
+
+    header.querySelector(".admin-nav-toggle")?.addEventListener("click", toggleNav);
+    backdrop.addEventListener("click", closeNav);
+
+    nav.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", () => {
+        if (window.matchMedia("(max-width: 1023px)").matches) closeNav();
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1023) closeNav();
+    });
+  }
   async function requireAdmin() {
     let user = window.auth?.getUser?.();
     if (user && user.role === "admin") return true;
@@ -215,4 +275,6 @@
   };
 
   setActiveAdminNav();
+  enhanceAdminShell();
 })();
+
