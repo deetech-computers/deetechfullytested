@@ -87,9 +87,15 @@
         order?.paymentDetails?.image
     );
     if (!raw) return "";
+    if (isLegacyUploadUrl(raw)) return "";
     if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
     if (raw.startsWith("/")) return `${BASE_URL || ""}${raw}`;
     return `${BASE_URL || ""}/${raw}`;
+  }
+
+  function isLegacyUploadUrl(url) {
+    const value = text(url).toLowerCase();
+    return value.includes("/uploads/") || value.endsWith("/uploads");
   }
 
   function customerName(order) {
@@ -219,7 +225,7 @@
             proof
               ? `<div class="proof-thumb-wrap">
                    <a class="proof-link" href="${proof}" target="_blank" rel="noreferrer">View Proof</a>
-                   <img class="proof-thumb" src="${proof}" alt="Proof thumbnail" loading="lazy" onerror="this.style.display='none'" />
+                   <img class="proof-thumb" src="${proof}" alt="Proof thumbnail" loading="lazy" />
                  </div>`
               : "<small>-</small>"
           }
@@ -289,7 +295,7 @@
               ${
                 proof
                   ? `<a class="proof-link" href="${proof}" target="_blank" rel="noreferrer">View</a>
-                     <img class="proof-thumb mobile" src="${proof}" alt="Proof thumbnail" loading="lazy" onerror="this.style.display='none'" />`
+                     <img class="proof-thumb mobile" src="${proof}" alt="Proof thumbnail" loading="lazy" />`
                   : "-"
               }
             </div>
@@ -408,8 +414,8 @@
           proof
             ? `<a class="proof-link" href="${proof}" target="_blank" rel="noreferrer" style="margin-bottom:8px;display:inline-flex;">Open Original</a>
                <div class="payment-proof-media">
-                 <img class="payment-proof-image" src="${proof}" alt="Payment proof" loading="lazy" onerror="this.style.display='none'; this.parentElement.querySelector('.payment-proof-error').style.display='block';" />
-                 <p class="payment-proof-error" style="display:none;">Could not load payment proof image. Use "Open Original".</p>
+                 <img class="payment-proof-image" src="${proof}" alt="Payment proof" loading="lazy" />
+                 <p class="payment-proof-error" hidden>Could not load payment proof image. Use "Open Original".</p>
                </div>`
             : "<p>No payment proof uploaded.</p>"
         }
@@ -542,3 +548,6 @@
     if (toast) toast("Failed to load orders", "error");
   });
 })();
+
+
+
