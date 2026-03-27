@@ -1279,3 +1279,33 @@
   flex-wrap: wrap;
   gap: 0.55rem;
 }
+.account-affiliate-actions .account-save-btn,
+.account-affiliate-actions .btn {
+  flex: 1 1 220px;
+  min-height: 56px;
+  margin-top: 0;
+  max-width: none;
+  width: auto;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.85rem 1.1rem;
+  text-align: center;
+}
+
+.account-affiliate-actions .btn {
+  border-width: 2px;
+}
+
+@media (max-width: 640px) {
+  .account-affiliate-actions {
+    gap: 0.6rem;
+  }
+
+  .account-affiliate-actions .account-save-btn,
+  .account-affiliate-actions .btn {
+    flex-basis: 100%;
+    min-height: 52px;
+    font-size: 0.98rem;
+  }
+}
