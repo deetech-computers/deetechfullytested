@@ -408,7 +408,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const affiliate = data?.affiliate || {};
     const stats = data?.stats || {};
 
-    if (affiliateCodeEl) affiliateCodeEl.textContent = String(affiliate.code || "-");
+    currentAffiliateCode = String(affiliate.code || "").trim();
+    if (affiliateCodeEl) affiliateCodeEl.textContent = currentAffiliateCode || "-";
+    if (affiliateCopyCodeBtn) affiliateCopyCodeBtn.dataset.code = currentAffiliateCode;
     if (affiliateTierEl) {
       const tier = String(affiliate.tier || "starter");
       affiliateTierEl.textContent = `${tier.charAt(0).toUpperCase()}${tier.slice(1)}`;
@@ -481,8 +483,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function copyAffiliateCode() {
-    const code = String(affiliateCodeEl?.textContent || "").trim();
-    if (!code || code === "-") return;
+    const codeFromData = String(affiliateCopyCodeBtn?.dataset?.code || "").trim();
+    const codeFromState = String(currentAffiliateCode || "").trim();
+    const codeFromUi = String(affiliateCodeEl?.textContent || "").trim();
+    const code = [codeFromData, codeFromState, codeFromUi].find((v) => v && v !== "-") || "";
+
+    if (!code) {
+      showToast?.("Affiliate code is not available yet.", "info");
+      return;
+    }
+
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(code);
