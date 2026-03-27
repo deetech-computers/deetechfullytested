@@ -206,10 +206,12 @@
   text-decoration: none;
 }
 
-.account-sidebar-tab:hover {
-  color: var(--account-primary);
-  background: rgba(37, 99, 235, 0.05);
-  transform: translateX(5px);
+@media (hover: hover) and (pointer: fine) {
+  .account-sidebar-tab:hover {
+    color: var(--account-primary);
+    background: rgba(37, 99, 235, 0.05);
+    transform: translateX(5px);
+  }
 }
 
 .account-sidebar-tab.account-active {
