@@ -1,4 +1,4 @@
-const CACHE_NAME = "deetech-static-v15";
+const CACHE_NAME = "deetech-static-v16";
 const OFFLINE_URL = "offline.html";
 const SNAPSHOT_URL = "assets/data/products-snapshot.json";
 const PLACEHOLDER_URL = "assets/img/placeholder.svg";
@@ -61,6 +61,7 @@ function isProductApiRequest(url) {
 
 function isRealtimeCriticalAsset(url) {
   const p = url.pathname || "";
+  if (/\/admin\//i.test(p)) return true;
   return (
     p.endsWith("/checkout.html") ||
     p.endsWith("/thankyou.html") ||
@@ -225,6 +226,7 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
 
 
 

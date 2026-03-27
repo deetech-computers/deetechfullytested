@@ -1,66 +1,185 @@
 @import url("./admin-shared.css");
 
 .discounts-page {
-  animation: admin-fadeIn 0.3s ease-out;
+  animation: admin-fadeIn 0.32s ease-out;
+}
+
+.discounts-page .hidden {
+  display: none !important;
+}
+
+.discounts-page .admin-controls {
+  display: grid;
+  gap: 12px;
+}
+
+.discounts-help {
+  margin: 0;
+  font-size: 0.86rem;
+  color: #334155;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 12px;
+  line-height: 1.45;
+}
+
+.discount-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  align-items: end;
+}
+
+.field-group {
+  display: grid;
+  gap: 6px;
+}
+
+.field-group label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  color: #64748b;
+  letter-spacing: 0.04em;
+  font-weight: 800;
 }
 
 .discounts-page .input {
-  border: 2px solid #d5ddeb;
-  border-radius: 10px;
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #cfd9ea;
+  border-radius: 12px;
   padding: 10px 12px;
+  background: #f8fbff;
+  color: #0f172a;
+  font-size: 0.93rem;
+  font-weight: 600;
 }
 
 .discounts-page .input:focus {
   outline: none;
-  border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  background: #ffffff;
 }
 
-.discounts-page #discountForm > .btn-admin {
-  grid-column: 1 / -1;
-  justify-self: start;
-  min-width: 140px;
+.discount-form > .btn-admin {
+  min-height: 46px;
+  border-radius: 12px;
+  font-weight: 800;
 }
 
 .new-codes-box {
-  margin-top: 12px;
+  margin-top: 2px;
   border: 1px solid #bfdbfe;
   background: #eff6ff;
   color: #1e40af;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px 12px;
-  font-weight: 600;
+  font-weight: 700;
   word-break: break-word;
 }
 
 .discounts-summary {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.discounts-kpi {
+  position: relative;
+  margin: 0;
+  border-radius: 15px;
+  border: 0;
+  padding: 12px 13px;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.13);
+  font-weight: 800;
+  overflow: hidden;
+}
+
+.discounts-kpi::after {
+  content: "";
+  position: absolute;
+  width: 108px;
+  height: 108px;
+  right: -34px;
+  top: -38px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.discounts-kpi.total { background: linear-gradient(135deg, #5b21b6, #4338ca); }
+.discounts-kpi.active { background: linear-gradient(135deg, #0284c7, #2563eb); }
+.discounts-kpi.used { background: linear-gradient(135deg, #b91c1c, #ef4444); }
+.discounts-kpi.avg { background: linear-gradient(135deg, #0f766e, #10b981); }
+
+.discounts-kpi-label {
+  color: #dbeafe;
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.discounts-kpi strong {
+  color: #ffffff;
+  font-size: clamp(1.02rem, 1.9vw, 1.45rem);
+  font-weight: 900;
+}
+
+.discounts-controls {
+  display: grid;
+  grid-template-columns: 1fr minmax(170px, 220px) minmax(120px, 150px);
   gap: 10px;
   margin-bottom: 12px;
 }
 
-.discounts-summary p {
-  margin: 0;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  padding: 10px 12px;
-  background: #fff;
-  font-weight: 600;
+.discounts-controls .btn-admin {
+  min-height: 46px;
+  border-radius: 12px;
+  font-weight: 800;
 }
 
-.discounts-summary strong {
-  color: #1d4ed8;
+.discounts-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
 .discounts-table th,
 .discounts-table td {
   vertical-align: middle;
+  padding: 11px 12px;
+  border-bottom: 1px solid #ecf0f6;
+}
+
+.discounts-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.discounts-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #f8fafc;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  font-weight: 800;
+}
+
+.discounts-table tbody tr:hover {
+  background: #f8fbff;
 }
 
 .discount-code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  font-weight: 700;
+  font-weight: 800;
   color: #1d4ed8;
 }
 
@@ -70,8 +189,8 @@
   justify-content: center;
   border-radius: 999px;
   padding: 4px 10px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: 0.74rem;
+  font-weight: 800;
 }
 
 .used-chip.yes {
@@ -84,15 +203,31 @@
   color: #166534;
 }
 
+.discount-action {
+  border: 1px solid #d4dbe8;
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 10px;
+  min-height: 34px;
+  padding: 6px 10px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.discount-action:hover {
+  background: #f8fafc;
+}
+
 .discounts-mobile-list {
   display: none;
 }
 
 .discount-card {
-  border: 2px solid #dbe2ef;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
+  border: 1px solid #dbe2ef;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.07);
   padding: 10px;
 }
 
@@ -109,15 +244,37 @@
 }
 
 .discount-card-label {
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   text-transform: uppercase;
   color: #64748b;
+  font-weight: 800;
 }
 
 .discount-card-value {
   font-size: 0.88rem;
   color: #0f172a;
   text-align: right;
+}
+
+.discount-card-actions {
+  margin-top: 8px;
+  display: grid;
+}
+
+.discounts-page .empty-state {
+  margin-top: 10px;
+  border-radius: 14px;
+  border: 1px dashed #cbd5e1;
+  background: #f8fafc;
+  padding: 18px;
+  text-align: center;
+  color: #64748b;
+}
+
+@media (max-width: 1200px) {
+  .discounts-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 1024px) {
@@ -132,12 +289,17 @@
 }
 
 @media (max-width: 768px) {
+  .discount-form,
+  .discounts-controls,
   .discounts-summary {
     grid-template-columns: 1fr;
   }
 
-  .discounts-page #discountForm > .btn-admin {
-    width: 100%;
+  .discounts-kpi {
+    padding: 10px 11px;
+  }
+
+  .discounts-kpi strong {
+    font-size: 1.06rem;
   }
 }
-

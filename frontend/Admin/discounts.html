@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -7,15 +7,13 @@
   <link rel="apple-touch-icon" href="../assets/img/logo.png">
   <title>Admin Discounts</title>
   <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/discounts.css">
+  <link rel="stylesheet" href="assets/css/discounts.css?v=20260327-2">
 </head>
 <body class="admin-portal">
   <div class="admin-shell discounts-page">
     <div class="admin-header">
       <h1>Discount Codes</h1>
-      <div class="admin-actions">
-        <a class="btn-admin btn-ghost" href="index.html">Dashboard</a>
-      </div>
+      <div class="admin-actions"></div>
     </div>
 
     <nav class="admin-nav">
@@ -30,29 +28,60 @@
       <a href="discounts.html">Discounts</a>
     </nav>
 
-    <section class="admin-card">
-      <h3>Generate Codes</h3>
-      <form id="discountForm" class="grid-2">
-        <input class="input" name="percent" type="number" min="2" max="10" placeholder="Percent (2-10)" required>
-        <input class="input" name="count" type="number" min="1" max="50" placeholder="Count" value="1">
-        <button class="btn-admin" type="submit">Generate</button>
+    <section class="admin-card admin-controls">
+      <p class="discounts-help">Create one or more discount codes. Codes can be used once and tracked live.</p>
+      <form id="discountForm" class="discount-form">
+        <div class="field-group">
+          <label for="discountPercent">Percent</label>
+          <input id="discountPercent" class="input" name="percent" type="number" min="2" max="10" placeholder="2 - 10" required>
+        </div>
+        <div class="field-group">
+          <label for="discountCount">Count</label>
+          <input id="discountCount" class="input" name="count" type="number" min="1" max="50" placeholder="1 - 50" value="1">
+        </div>
+        <button class="btn-admin" type="submit">Generate Codes</button>
       </form>
       <div id="newCodes" class="new-codes-box hidden"></div>
     </section>
 
     <section class="admin-card">
-      <h3>All Codes</h3>
-      <div class="discounts-summary">
-        <p>Total Codes: <strong id="summaryTotalCodes">0</strong></p>
-        <p>Used Codes: <strong id="summaryUsedCodes">0</strong></p>
+      <div id="discountsSummary" class="discounts-summary">
+        <article class="discounts-kpi total">
+          <span class="discounts-kpi-label">Total Codes</span>
+          <strong id="summaryTotalCodes">0</strong>
+        </article>
+        <article class="discounts-kpi active">
+          <span class="discounts-kpi-label">Unused Codes</span>
+          <strong id="summaryUnusedCodes">0</strong>
+        </article>
+        <article class="discounts-kpi used">
+          <span class="discounts-kpi-label">Used Codes</span>
+          <strong id="summaryUsedCodes">0</strong>
+        </article>
+        <article class="discounts-kpi avg">
+          <span class="discounts-kpi-label">Average Percent</span>
+          <strong id="summaryAvgPercent">0%</strong>
+        </article>
       </div>
+
+      <div class="discounts-controls">
+        <input id="discountSearch" class="input" type="search" placeholder="Search code (example: ABC123)">
+        <select id="discountUsageFilter" class="input">
+          <option value="all">All Codes</option>
+          <option value="unused">Unused Only</option>
+          <option value="used">Used Only</option>
+        </select>
+        <button id="discountReloadBtn" class="btn-admin btn-ghost" type="button">Reload</button>
+      </div>
+
       <table class="admin-table discounts-table" id="discountsTable">
         <thead>
           <tr>
             <th>Code</th>
             <th>Percent</th>
-            <th>Used</th>
+            <th>Status</th>
             <th>Created</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -60,7 +89,7 @@
       <div id="discountsMobileList" class="discounts-mobile-list"></div>
       <div id="discountsEmptyState" class="empty-state hidden">
         <h3>No Discount Codes</h3>
-        <p>Generate your first discount codes to get started.</p>
+        <p>No discounts match the current filter.</p>
       </div>
     </section>
   </div>
@@ -70,12 +99,6 @@
   <script src="../assets/js/config.js"></script>
   <script src="../assets/js/auth.js"></script>
   <script src="assets/js/admin-common.js"></script>
-  <script src="assets/js/discounts.js"></script>
+  <script src="assets/js/discounts.js?v=20260327-2"></script>
 </body>
 </html>
-
-
-
-
-
-
