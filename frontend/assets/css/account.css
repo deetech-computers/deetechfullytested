@@ -1399,7 +1399,7 @@
   font-size: 1.02rem;
   color: #0f172a;
   font-weight: 500;
-  background: #fff;
+  background: #f8fafc;
 }
 
 .account-sidebar-tab:nth-child(even) {
@@ -1407,9 +1407,9 @@
 }
 
 .account-sidebar-tab.account-active {
-  background: #eef4ff;
-  color: #1e40af;
-  border-left: 3px solid #1e40af;
+  background: #f8fafc;
+  color: #0f172a;
+  border-left: 0;
 }
 
 .account-tab-icon {
@@ -1701,7 +1701,7 @@
   padding: 0 20px;
   border: 0;
   border-bottom: 1px solid #e5e7eb;
-  background: #ffffff;
+  background: #f8fafc;
   color: #0f172a;
   font-size: 1.02rem;
   font-weight: 500;
@@ -1721,7 +1721,7 @@
 }
 
 .account-sidebar-tab.account-active {
-  background: #eef4ff;
+  background: #f8fafc;
   color: #0f172a;
   border-left: 0;
   box-shadow: none;
@@ -2062,5 +2062,4 @@ body.account-page-leaving .account-page {
     font-size: 0.9rem;
   }
 }
-
 
