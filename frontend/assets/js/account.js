@@ -138,8 +138,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function setMobileQuickNav(tab) {
     if (!mobileQuickLinks.length) return;
+    const activeTab = String(tab || "main");
     mobileQuickLinks.forEach((link) => {
-      link.classList.toggle("account-active", String(link.dataset.mobileTab || "") === String(tab || "main"));
+      link.classList.toggle("account-active", String(link.dataset.mobileTab || "") === activeTab);
+    });
+
+    if (!isMobileAccountView()) return;
+    const activeLink = mobileQuickLinks.find((link) => link.classList.contains("account-active"));
+    if (!activeLink) return;
+    requestAnimationFrame(() => {
+      activeLink.scrollIntoView({ behavior: "auto", block: "nearest", inline: "center" });
     });
   }
   function updateAccountHeader(tab) {
@@ -840,6 +848,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadAccountInfo();
 });
+
 
 
 

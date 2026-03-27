@@ -1,5 +1,18 @@
 // assets/js/account-sidebar-profile.js
 (function () {
+  function alignActiveMobileQuickNav(behavior = "auto") {
+    const nav = document.querySelector(".account-mobile-quicknav");
+    const activeLink = nav?.querySelector("a.account-active");
+    if (!nav || !activeLink) return;
+
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    const outsideViewport = linkRect.left < navRect.left || linkRect.right > navRect.right;
+    if (!outsideViewport) return;
+
+    activeLink.scrollIntoView({ behavior, block: "nearest", inline: "center" });
+  }
+
   function fillIdentity() {
     const nameEl = document.getElementById("accountSidebarName");
     const emailEl = document.getElementById("accountSidebarEmail");
@@ -14,8 +27,14 @@
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", fillIdentity);
+    document.addEventListener("DOMContentLoaded", () => {
+      fillIdentity();
+      requestAnimationFrame(() => alignActiveMobileQuickNav("auto"));
+    });
   } else {
     fillIdentity();
+    requestAnimationFrame(() => alignActiveMobileQuickNav("auto"));
   }
+
+  window.addEventListener("resize", () => alignActiveMobileQuickNav("auto"));
 })();
