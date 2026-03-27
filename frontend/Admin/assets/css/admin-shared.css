@@ -1327,3 +1327,58 @@ body.admin-portal .admin-nav-backdrop {
     margin: 10px 10px 0;
   }
 }
+
+/* ===== Full viewport + top alignment fix ===== */
+html,
+body {
+  min-height: 100%;
+}
+
+body.admin-portal {
+  margin: 0 !important;
+  min-height: 100vh;
+}
+
+body.admin-portal .admin-shell {
+  min-height: 100vh;
+  height: 100vh;
+}
+
+body.admin-portal .admin-header {
+  margin: 0;
+}
+
+@media (max-width: 1023px) {
+  body.admin-portal {
+    min-height: 100dvh;
+  }
+
+  body.admin-portal .admin-shell {
+    min-height: 100dvh;
+    height: auto;
+  }
+}
+
+/* ===== Final admin viewport hard-fix ===== */
+body.admin-portal {
+  margin: 0 !important;
+  padding-top: 0 !important;
+  min-height: 100vh;
+}
+
+body.admin-portal .admin-shell {
+  min-height: 100vh;
+  height: 100vh;
+  align-content: stretch;
+}
+
+@media (max-width: 1023px) {
+  body.admin-portal {
+    min-height: 100dvh;
+  }
+
+  body.admin-portal .admin-shell {
+    min-height: 100dvh;
+    height: auto;
+  }
+}
