@@ -2107,3 +2107,18 @@ body.account-page-leaving .account-page {
     display: none !important;
   }
 }
+
+
+.account-mobile-back-nav {
+  display: flex !important;
+  margin-top: 0.45rem;
+  margin-bottom: 0.7rem;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 1024px) {
+  .account-mobile-back-nav {
+    display: none !important;
+  }
+}
