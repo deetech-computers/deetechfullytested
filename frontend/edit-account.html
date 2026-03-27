@@ -17,11 +17,24 @@
 
   <!-- JS -->
 </head>
-<body data-require-auth="true">
+<body data-require-auth="true" class="account-subpage">
 
   <header class="site-header"></header>
 
   <main class="account-page">
+    <nav class="account-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span aria-hidden="true">&rsaquo;</span>
+      <a href="account.html">My Account</a>
+      <span aria-hidden="true">&rsaquo;</span>
+      <span>Edit Profile</span>
+    </nav>
+    <div class="account-mobile-subnav">
+      <a href="account.html" class="account-mobile-subnav-back" aria-label="Back to account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg>
+      </a>
+      <h2>Edit Profile</h2>
+    </div>
     <section class="account-header compact">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 2-8 4.5V21h16v-2.5c0-2.5-3.58-4.5-8-4.5Z"/>
@@ -30,13 +43,18 @@
         <h1>Edit Profile</h1>
         <p class="account-welcome">Update your name. Email changes are not allowed.</p>
       </div>
-    </section>
-    <div class="account-mobile-back-nav">
-      <a href="account.html" class="btn btn-outline account-back-btn" data-account-back>Back to Account Menu</a>
-    </div>
-
-    <section class="account-layout">
+    </section><section class="account-layout">
       <aside class="account-sidebar">
+        <div class="account-sidebar-profile">
+          <span class="account-sidebar-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 2-8 4.5V21h16v-2.5c0-2.5-3.58-4.5-8-4.5Z"/></svg>
+          </span>
+          <div>
+            <h2 id="accountSidebarName">Hello! Customer</h2>
+            <p id="accountSidebarEmail">guest@deetech.com</p>
+          </div>
+        </div>
+        <h3 class="account-sidebar-title">My Account</h3>
         <a class="account-sidebar-tab" href="account.html">Profile</a>
         <a class="account-sidebar-tab" href="account.html?tab=reviews">My Reviews</a>
         <a class="account-sidebar-tab" href="orders.html">My Orders</a>
@@ -72,9 +90,8 @@
   <script src="assets/js/runtime-config.js"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/auth.js"></script>
+  <script src="assets/js/account-sidebar-profile.js"></script>
   <script src="assets/js/edit-account.js"></script>
-  <script src="assets/js/account-mobile-reveal.js?v=20260326-6"></script>
-  <script defer src="assets/js/account-back-visibility.js?v=20260326-1"></script>
   <script src="assets/js/account-nav-transition.js?v=20260326-1"></script>
   <script src="assets/js/activeLink.js"></script>
   <footer class="footer">
@@ -154,6 +171,15 @@
   </footer>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
 
 
 

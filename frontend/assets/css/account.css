@@ -1329,20 +1329,6 @@
     font-size: 0.98rem;
   }
 }
-.account-view-nav {
-  margin-bottom: 0.8rem;
-}
-
-.account-back-btn {
-  min-height: 40px;
-  border-radius: 10px;
-  font-size: 0.92rem;
-}
-@media (min-width: 1024px) {
-  .account-view-nav {
-    display: none;
-  }
-}
 /* ===== Account Reference Layout (clean, flat, minimal) ===== */
 .account-page {
   max-width: min(1180px, 95vw);
@@ -1444,10 +1430,6 @@
   display: none;
 }
 
-.account-view-nav {
-  margin: 0;
-  padding: 0.75rem 1rem 0;
-}
 
 .account-profile-form {
   max-width: none;
@@ -2090,58 +2072,154 @@ body.account-page-leaving .account-page {
   }
 }
 
-.account-header-nav {
+
+/* ===== Account Navigation Reference Layout ===== */
+.account-breadcrumb {
   display: flex;
-  margin-top: 0.45rem;
-  margin-bottom: 0.7rem;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 18px;
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.account-breadcrumb a {
+  color: #0f172a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.account-breadcrumb a:hover {
+  color: #1d4ed8;
+}
+
+.account-breadcrumb span:last-child {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.account-sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  margin: 8px 8px 12px;
+  background: #fff;
+}
+
+.account-sidebar-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #cbd5e1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 52px;
+}
+
+.account-sidebar-avatar svg {
+  width: 30px;
+  height: 30px;
+}
+
+.account-sidebar-profile h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.15;
+  color: #0f172a;
+}
+
+.account-sidebar-profile p {
+  margin: 2px 0 0;
+  font-size: 1.15rem;
+  color: #64748b;
+}
+
+.account-sidebar-title {
+  margin: 0;
+  padding: 12px 12px 10px;
+  color: #0f172a;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.account-mobile-subnav {
+  display: none;
 }
 
 @media (max-width: 1023px) {
-  .account-header-nav {
-    display: flex !important;
+  .account-breadcrumb {
+    display: none;
+  }
+
+  .account-page {
+    padding: 0.5rem;
+  }
+
+  .account-sidebar-profile h2 {
+    font-size: 1.8rem;
+  }
+
+  .account-sidebar-profile p {
+    font-size: 1rem;
+  }
+
+  .account-sidebar-title {
+    font-size: 1.6rem;
+    padding: 10px 10px 8px;
+  }
+
+  body.account-subpage .account-header {
+    display: none;
+  }
+
+  body.account-subpage .account-sidebar {
+    display: none;
+  }
+
+  body.account-subpage .account-layout {
+    display: block;
+  }
+
+  body.account-subpage .account-content {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+
+  body.account-subpage .account-mobile-subnav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 14px;
+    padding: 2px 2px 8px;
+  }
+
+  .account-mobile-subnav-back {
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #0f172a;
+    text-decoration: none;
+  }
+
+  .account-mobile-subnav-back svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .account-mobile-subnav h2 {
+    margin: 0;
+    color: #0f172a;
+    font-size: 1.25rem;
+    font-weight: 700;
   }
 }
 
-@media (min-width: 1024px) {
-  .account-header-nav {
-    display: none !important;
-  }
-}
-
-
-.account-mobile-back-nav {
-  display: flex !important;
-  margin-top: 0.45rem;
-  margin-bottom: 0.7rem;
-  position: relative;
-  z-index: 2;
-}
-
-@media (min-width: 1024px) {
-  .account-mobile-back-nav {
-    display: none !important;
-  }
-}
-
-@media (max-width: 1023px) {
-  body[data-require-auth="true"] .account-mobile-back-nav {
-    display: flex !important;
-    margin-top: 0.45rem !important;
-    margin-bottom: 0.7rem !important;
-    padding: 0 0.25rem !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-
-  body[data-require-auth="true"] .account-mobile-back-nav .account-back-btn {
-    display: inline-flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  body[data-require-auth="true"] .account-mobile-back-nav {
-    display: none !important;
-  }
-}

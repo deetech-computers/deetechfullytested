@@ -23,17 +23,29 @@
   <script defer src="assets/js/runtime-config.js"></script>
   <script defer src="assets/js/config.js"></script>
   <script defer src="assets/js/auth.js"></script>
+  <script defer src="assets/js/account-sidebar-profile.js"></script>
   <script defer src="assets/js/orders.js"></script>
-  <script defer src="assets/js/account-mobile-reveal.js?v=20260326-6"></script>
-  <script defer src="assets/js/account-back-visibility.js?v=20260326-1"></script>
   <script defer src="assets/js/activeLink.js"></script>
   <script defer src="assets/js/account-nav-transition.js?v=20260326-1"></script>
 </head>
-<body data-require-auth="true">
+<body data-require-auth="true" class="account-subpage">
 
   <header class="site-header"></header>
 
   <main class="account-page">
+    <nav class="account-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <span aria-hidden="true">&rsaquo;</span>
+      <a href="account.html">My Account</a>
+      <span aria-hidden="true">&rsaquo;</span>
+      <span>Orders</span>
+    </nav>
+    <div class="account-mobile-subnav">
+      <a href="account.html" class="account-mobile-subnav-back" aria-label="Back to account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M15.4 5.4 14 4l-8 8 8 8 1.4-1.4L8.8 12z"/></svg>
+      </a>
+      <h2>Orders</h2>
+    </div>
     <section class="account-header compact">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path fill="currentColor" d="M3 6h18v12H3zm2 2v8h14V8zm2 2h6v2H7z"/>
@@ -42,17 +54,22 @@
         <h1>Orders</h1>
         <p class="account-welcome">Track your recent purchases and order status.</p>
       </div>
-    </section>
-    <div class="account-mobile-back-nav">
-      <a href="account.html" class="btn btn-outline account-back-btn" data-account-back>Back to Account Menu</a>
-    </div>
-
-    <section class="account-layout">
+    </section><section class="account-layout">
       <aside class="account-sidebar">
+        <div class="account-sidebar-profile">
+          <span class="account-sidebar-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 2-8 4.5V21h16v-2.5c0-2.5-3.58-4.5-8-4.5Z"/></svg>
+          </span>
+          <div>
+            <h2 id="accountSidebarName">Hello! Customer</h2>
+            <p id="accountSidebarEmail">guest@deetech.com</p>
+          </div>
+        </div>
+        <h3 class="account-sidebar-title">My Account</h3>
         <a class="account-sidebar-tab" href="account.html"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm0 2c-4.42 0-8 2-8 4.5V21h16v-2.5c0-2.5-3.58-4.5-8-4.5Z"/></svg></span><span class="account-tab-label">Profile</span><span class="account-tab-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span></a>
-        <a class="account-sidebar-tab" href="account.html?tab=reviews"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span><span class="account-tab-label">Review</span><span class="account-tab-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span></a>
+        <a class="account-sidebar-tab" href="account.html?tab=reviews"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></span><span class="account-tab-label">Reviews</span><span class="account-tab-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span></a>
         <a class="account-sidebar-tab" href="account.html?tab=affiliate"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 2 7l10 5 8-4v6h2V7L12 2Zm-7 9v4c0 2.76 3.13 5 7 5s7-2.24 7-5v-4l-7 3.5L5 11Z"/></svg></span><span class="account-tab-label">Affiliate Program</span><span class="account-tab-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span></a>
-        <button class="account-sidebar-tab account-active" id="accountOpenOrdersContent" data-account-open-current type="button"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4h10v2h2v14H5V6h2V4Zm0 4v10h10V8H7Zm2 2h6v2H9Z"/></svg></span><span class="account-tab-label">Orders</span><span class="account-tab-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span></button>
+        <a class="account-sidebar-tab account-active" href="orders.html"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M7 4h10v2h2v14H5V6h2V4Zm0 4v10h10V8H7Zm2 2h6v2H9Z"/></svg></span><span class="account-tab-label">Orders</span><span class="account-tab-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span></a>
         <a class="account-sidebar-tab" href="change-password.html"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M17 8h-1V6a4 4 0 1 0-8 0v2H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2ZM10 6a2 2 0 1 1 4 0v2h-4V6Z"/></svg></span><span class="account-tab-label">Password</span><span class="account-tab-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M9 6l6 6-6 6"/></svg></span></a>
         <button class="account-sidebar-tab" id="logoutBtn" type="button"><span class="account-tab-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M10 17v-2h4V9h-4V7h6v10h-6Zm9-13H5a2 2 0 0 0-2 2v4h2V6h14v12H5v-4H3v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg></span><span class="account-tab-label">Logout</span></button>
       </aside>
@@ -143,3 +160,12 @@
   </footer>
 </body>
 </html>
+
+
+
+
+
+
+
+
+

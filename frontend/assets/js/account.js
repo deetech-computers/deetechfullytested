@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const adminBadge = document.getElementById("accountAdminBadge");
   const accountHeaderTitle = document.getElementById("accountHeaderTitle");
   const accountHeaderSubtitle = document.getElementById("accountHeaderSubtitle");
+  const accountCrumbCurrent = document.getElementById("accountCrumbCurrent");
+  const accountSidebarName = document.getElementById("accountSidebarName");
+  const accountSidebarEmail = document.getElementById("accountSidebarEmail");
   const form = document.getElementById("accountProfileForm");
   const messageEl = document.getElementById("accountProfileMessage");
   const logoutBtn = document.getElementById("accountLogoutBtn");
@@ -111,7 +114,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         subtitle: "Manage your personal details, orders, and account preferences.",
       },
       reviews: {
-        title: "Review",
+        title: "Reviews",
         subtitle: "Track your product feedback and open any item directly to its Reviews section.",
       },
       affiliate: {
@@ -122,6 +125,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const active = copy[tab] || copy.profile;
     accountHeaderTitle.textContent = active.title;
     accountHeaderSubtitle.textContent = active.subtitle;
+    if (accountCrumbCurrent) accountCrumbCurrent.textContent = active.title;
   }
 
   function showAccountMenu() {
@@ -473,6 +477,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (firstNameInput) firstNameInput.value = first;
       if (lastNameInput) lastNameInput.value = last;
       if (emailInput) emailInput.value = user.email || "";
+      if (accountSidebarName) accountSidebarName.textContent = `Hello! ${first || user.firstName || "Customer"}`;
+      if (accountSidebarEmail) accountSidebarEmail.textContent = user.email || "guest@deetech.com";
       if (phoneInput) phoneInput.value = user.phone || "";
       if (addressInput) addressInput.value = user.address || "";
       if (regionInput) regionInput.value = user.region || "";
@@ -775,3 +781,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadAccountInfo();
 });
+
+
+
