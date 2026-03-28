@@ -1,4 +1,4 @@
-// assets/js/products.js
+﻿// assets/js/products.js
 document.addEventListener("DOMContentLoaded", () => {
   const {
     API_BASE_PRODUCTS,
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const paginationEl = document.getElementById("pagination");
   const cartCountEl = document.getElementById("headerCartCount");
   const cartTotalEl = document.getElementById("headerCartTotal");
-  const headingEl = document.querySelector(".products-header h2");
+  const headingEl = document.querySelector(".products-header h1, .products-header h2");
 
   const searchInput = document.getElementById("productsSearchInput");
   const searchForm = document.getElementById("productsSearchForm");
@@ -534,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateHeading(total) {
-    const label = getCategoryLabel(state.category);
+    const label = state.category === "all" ? "All Products" : getCategoryLabel(state.category);
     const sortLabel =
       state.sort === "price-low" ? " - Price Low to High" :
       state.sort === "price-high" ? " - Price High to Low" :
@@ -549,7 +549,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateSeoMeta(total) {
     const meta = document.querySelector('meta[name="description"]');
-    const label = getCategoryLabel(state.category);
+    const label = state.category === "all" ? "All Products" : getCategoryLabel(state.category);
     const titleBase = "Deetech Computers | Products";
     const hasSearch = Boolean(state.q && state.q.trim());
     const rawSection = state.section ? state.section.replace(/_/g, " ") : "";
@@ -1160,6 +1160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   init();
 });
+
 
 
 
