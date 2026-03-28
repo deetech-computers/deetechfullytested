@@ -742,8 +742,8 @@ async function renderOrder(products) {
       affiliateAmount.textContent = money(affiliateUiState.commissionAmount);
       if (affiliateLabel) {
         affiliateLabel.textContent = affiliateUiState.name
-          ? `Supporting ${affiliateUiState.name}`
-          : "Supporting Affiliate";
+          ? `Affiliate Earning (${affiliateUiState.name})`
+          : "Affiliate Earning";
       }
     }
   }
@@ -823,14 +823,20 @@ function wireScreenshotPreview() {
   const img = document.getElementById("screenshot-preview");
   if (!input || !img) return;
 
+  let lastObjectUrl = "";
   input.addEventListener("change", () => {
     const f = input.files?.[0];
+    if (lastObjectUrl) {
+      URL.revokeObjectURL(lastObjectUrl);
+      lastObjectUrl = "";
+    }
     if (!f) {
       img.style.display = "none";
       img.src = "";
       return;
     }
-    img.src = URL.createObjectURL(f);
+    lastObjectUrl = URL.createObjectURL(f);
+    img.src = lastObjectUrl;
     img.style.display = "block";
   });
 }
@@ -839,6 +845,194 @@ function toggleGuestUI(isLoggedIn) {
   const guestBox = document.getElementById("guest-payment-proof");
   if (!guestBox) return;
   guestBox.style.display = "block";
+}
+
+function initCheckoutStepFlow() {
+  const form = document.getElementById("checkout-form");
+  if (!form) return;
+
+  const heading = form.querySelector("h3");
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const phoneInput = document.getElementById("phone");
+  const addressInput = document.getElementById("address");
+  const cityInput = document.getElementById("city");
+  const notesInput = document.getElementById("notes");
+  const affiliateInput = document.getElementById("affiliate-code");
+  const affiliateStatus = document.getElementById("affiliate-code-status");
+  const paymentMethodSelect = document.getElementById("payment-method");
+  const paymentOptions = document.getElementById("payment-options");
+  const paymentInstructions = document.getElementById("payment-instructions");
+  const paymentProof = document.getElementById("guest-payment-proof");
+  const screenshotInput = document.getElementById("payment-screenshot");
+  const placeOrderBtn = document.getElementById("place-order-btn");
+  const checkoutMsg = document.getElementById("checkout-message");
+  const discountInput = document.getElementById("discount-code");
+  const applyDiscountBtn = document.getElementById("apply-discount");
+  const discountStatus = document.getElementById("discount-code-status");
+
+  if (!heading || !nameInput || !affiliateInput || !paymentMethodSelect || !placeOrderBtn) return;
+
+  const formChildren = Array.from(form.children);
+  const hiddenInputs = formChildren.filter((el) => el.tagName === "INPUT" && el.type === "hidden");
+  hiddenInputs.forEach((el) => form.removeChild(el));
+
+  const stepper = document.createElement("div");
+  stepper.className = "checkout-stepper";
+  stepper.innerHTML = `
+    <div class="checkout-stepper-item is-active" data-stepper-index="1"><span>1</span><p>Buyer Details</p></div>
+    <div class="checkout-stepper-item" data-stepper-index="2"><span>2</span><p>Payment & Discount</p></div>
+    <div class="checkout-stepper-item" data-stepper-index="3"><span>3</span><p>Review & Place Order</p></div>
+  `;
+
+  const stepWrap = document.createElement("div");
+  stepWrap.className = "checkout-step-wrap";
+
+  const step1 = document.createElement("section");
+  step1.className = "checkout-step-panel is-active";
+  step1.dataset.step = "1";
+  step1.innerHTML = `<h4>Buyer Details</h4><p class="checkout-step-note">Enter your delivery details and optional affiliate code.</p>`;
+
+  const step2 = document.createElement("section");
+  step2.className = "checkout-step-panel";
+  step2.dataset.step = "2";
+  step2.innerHTML = `<h4>Manual Payment & Discount</h4><p class="checkout-step-note">Choose payment method, view account details, and upload payment proof.</p>`;
+
+  const step3 = document.createElement("section");
+  step3.className = "checkout-step-panel";
+  step3.dataset.step = "3";
+  step3.innerHTML = `<h4>Review & Place Order</h4><p class="checkout-step-note">Review totals and place your order when ready.</p>`;
+
+  const moveIf = (el, target) => {
+    if (el && target && el.parentElement) target.appendChild(el);
+  };
+  const moveLabelAndField = (inputEl, target) => {
+    if (!inputEl || !target) return;
+    const label = form.querySelector(`label[for="${inputEl.id}"]`);
+    moveIf(label, target);
+    moveIf(inputEl, target);
+  };
+
+  moveLabelAndField(nameInput, step1);
+  const contactRow = emailInput?.closest(".two-col");
+  moveIf(contactRow, step1);
+  moveLabelAndField(addressInput, step1);
+  const cityNotesRow = cityInput?.closest(".two-col");
+  moveIf(cityNotesRow, step1);
+  moveLabelAndField(affiliateInput, step1);
+  const affiliateHint = affiliateInput?.nextElementSibling;
+  if (affiliateHint && affiliateHint.classList.contains("hint")) moveIf(affiliateHint, step1);
+  moveIf(affiliateStatus, step1);
+
+  const paymentLabel = form.querySelector('label[for="payment-method"]');
+  moveIf(paymentLabel, step2);
+  moveIf(paymentOptions, step2);
+  moveIf(paymentMethodSelect, step2);
+  moveIf(paymentInstructions, step2);
+  moveIf(paymentProof, step2);
+
+  const aside = document.querySelector("aside.order");
+  const discountRow = aside?.querySelector(".discount-row");
+  if (discountInput && applyDiscountBtn) {
+    const discountBlock = document.createElement("div");
+    discountBlock.className = "checkout-discount-block";
+    discountBlock.innerHTML = `<label for="discount-code">Discount Code (optional)</label>`;
+    moveIf(discountRow, discountBlock);
+    moveIf(discountStatus, discountBlock);
+    step2.appendChild(discountBlock);
+  }
+  moveIf(placeOrderBtn, step3);
+
+  const actions1 = document.createElement("div");
+  actions1.className = "checkout-step-actions";
+  actions1.innerHTML = `<button type="button" class="checkout-step-next" data-next-step="2">Continue to Payment</button>`;
+  step1.appendChild(actions1);
+
+  const actions2 = document.createElement("div");
+  actions2.className = "checkout-step-actions dual";
+  actions2.innerHTML = `
+    <button type="button" class="checkout-step-back" data-prev-step="1">Back to Details</button>
+    <button type="button" class="checkout-step-next" data-next-step="3">Continue to Review</button>
+  `;
+  step2.appendChild(actions2);
+
+  const actions3 = document.createElement("div");
+  actions3.className = "checkout-step-actions";
+  actions3.innerHTML = `<button type="button" class="checkout-step-back" data-prev-step="2">Back to Payment</button>`;
+  step3.prepend(actions3);
+
+  stepWrap.appendChild(step1);
+  stepWrap.appendChild(step2);
+  stepWrap.appendChild(step3);
+
+  heading.insertAdjacentElement("afterend", stepper);
+  stepper.insertAdjacentElement("afterend", stepWrap);
+  moveIf(checkoutMsg, form);
+
+  hiddenInputs.forEach((el) => form.appendChild(el));
+
+  let currentStep = 1;
+  const panels = [step1, step2, step3];
+  const stepItems = Array.from(stepper.querySelectorAll(".checkout-stepper-item"));
+
+  const showStep = (step) => {
+    currentStep = Math.min(3, Math.max(1, Number(step) || 1));
+    panels.forEach((panel, idx) => {
+      panel.classList.toggle("is-active", idx + 1 === currentStep);
+    });
+    stepItems.forEach((item, idx) => {
+      const index = idx + 1;
+      item.classList.toggle("is-active", index === currentStep);
+      item.classList.toggle("is-complete", index < currentStep);
+    });
+    try {
+      stepper.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch {}
+  };
+
+  const validateStep1 = () => {
+    const email = String(emailInput?.value || "").trim();
+    const phone = String(phoneInput?.value || "").replace(/\s+/g, "");
+    const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const phoneValid = /^(?:0\d{9}|\+233\d{9})$/.test(phone);
+    if (!String(nameInput?.value || "").trim() || !email || !String(addressInput?.value || "").trim() || !String(cityInput?.value || "").trim() || !phone) {
+      showMsg("Please complete your buyer details to continue.", false);
+      return false;
+    }
+    if (!emailValid || !phoneValid) {
+      showMsg("Please enter a valid email and Ghana phone number.", false);
+      return false;
+    }
+    return true;
+  };
+
+  const validateStep2 = () => {
+    if (!String(paymentMethodSelect?.value || "").trim()) {
+      showMsg("Please choose a payment method to continue.", false);
+      return false;
+    }
+    if (!screenshotInput?.files?.[0]) {
+      showMsg("Please upload payment screenshot to continue.", false);
+      return false;
+    }
+    return true;
+  };
+
+  form.addEventListener("click", (ev) => {
+    const nextBtn = ev.target.closest(".checkout-step-next");
+    if (nextBtn) {
+      const targetStep = Number(nextBtn.dataset.nextStep || 0);
+      if (currentStep === 1 && !validateStep1()) return;
+      if (currentStep === 2 && !validateStep2()) return;
+      showStep(targetStep);
+      return;
+    }
+    const backBtn = ev.target.closest(".checkout-step-back");
+    if (backBtn) {
+      const targetStep = Number(backBtn.dataset.prevStep || 0);
+      showStep(targetStep);
+    }
+  });
 }
 
 // ----------------------
@@ -881,6 +1075,7 @@ function handleCheckout(products) {
   const screenshotEl = document.getElementById("payment-screenshot");
   const affiliateCodeEl = document.getElementById("affiliate-code");
   const affiliateStatusEl = document.getElementById("affiliate-code-status");
+  const affiliateNote = document.getElementById("affiliate-note");
   const submitBtn = form ? (form.querySelector("#place-order-btn") || form.querySelector('button[type="submit"]') || form.querySelector('button[type="button"]')) : null;
   const btnText = submitBtn?.querySelector(".btn-text");
   const spinner = submitBtn?.querySelector(".spinner");
@@ -911,12 +1106,14 @@ function handleCheckout(products) {
       affiliateStatusEl.style.display = "none";
       affiliateStatusEl.textContent = "";
       affiliateStatusEl.style.color = "";
+      if (affiliateNote) affiliateNote.style.display = "none";
       affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, valid: false };
       await renderOrder(products);
       return;
     }
 
     affiliateStatusEl.style.display = "block";
+    if (affiliateNote) affiliateNote.style.display = "block";
     affiliateStatusEl.textContent = "Checking affiliate code...";
     affiliateStatusEl.style.color = "#475569";
 
@@ -954,6 +1151,9 @@ function handleCheckout(products) {
     }
   }
 
+  affiliateCodeEl?.addEventListener("focus", () => {
+    if (affiliateNote) affiliateNote.style.display = "block";
+  });
   affiliateCodeEl?.addEventListener("input", () => {
     if (affiliateValidateTimer) clearTimeout(affiliateValidateTimer);
     affiliateValidateTimer = setTimeout(() => {
@@ -962,6 +1162,9 @@ function handleCheckout(products) {
   });
   affiliateCodeEl?.addEventListener("blur", () => {
     validateAffiliateCodeUi();
+    if (!(affiliateCodeEl?.value || "").trim()) {
+      if (affiliateNote) affiliateNote.style.display = "none";
+    }
   });
 
   const runCheckoutSubmit = async (e) => {
@@ -1362,6 +1565,7 @@ function handleCheckout(products) {
     requestAnimationFrame(() => {
       setTimeout(hidePageLoader, 120);
     });
+    initCheckoutStepFlow();
     handleCheckout(products);
     setPaymentInstructions("");
     wireScreenshotPreview();
@@ -1469,6 +1673,14 @@ function handleCheckout(products) {
     }
   });
 })();
+
+
+
+
+
+
+
+
 
 
 
