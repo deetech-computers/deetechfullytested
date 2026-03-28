@@ -117,13 +117,18 @@
   display: none;
 }
 
+/* Desktop/tablet: never reserve mobile nav space */
 body.has-mobile-bottom-nav {
-  padding-bottom: 92px;
+  padding-bottom: 0;
 }
 
 @media (max-width: 900px) {
   .mobile-bottom-nav {
     display: block;
+  }
+
+  body.has-mobile-bottom-nav {
+    padding-bottom: 92px;
   }
 }
 
@@ -146,8 +151,12 @@ body.has-mobile-bottom-nav {
   .mobile-bottom-nav {
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
+}
 
-  body.has-mobile-bottom-nav {
-    padding-bottom: max(92px, calc(80px + env(safe-area-inset-bottom)));
+@supports (padding: max(0px)) and (width: 1px) {
+  @media (max-width: 900px) {
+    body.has-mobile-bottom-nav {
+      padding-bottom: max(92px, calc(80px + env(safe-area-inset-bottom)));
+    }
   }
 }

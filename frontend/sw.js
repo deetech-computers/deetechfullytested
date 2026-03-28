@@ -1,4 +1,4 @@
-const CACHE_NAME = "deetech-static-v16";
+const CACHE_NAME = "deetech-static-v19";
 const OFFLINE_URL = "offline.html";
 const SNAPSHOT_URL = "assets/data/products-snapshot.json";
 const PLACEHOLDER_URL = "assets/img/placeholder.svg";
@@ -226,10 +226,4 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
-
-
-
-
-
-
 

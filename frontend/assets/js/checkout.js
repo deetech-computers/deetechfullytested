@@ -1,4 +1,4 @@
-// assets/js/checkout.js
+﻿// assets/js/checkout.js
 // Save order to backend (emails are sent by backend SMTP service)
 (function () {
 
@@ -104,11 +104,102 @@ function setupCheckoutMobileLayout() {
   }
 }
 
+function clearCheckoutMobileInlineStyles() {
+  try {
+    const html = document.documentElement;
+    const body = document.body;
+    if (html) html.style.overflowX = "";
+    if (body) body.style.overflowX = "";
+
+    const selectors = [
+      "body.checkout-mobile-flow .site-header",
+      "body.checkout-mobile-flow .site-header *",
+      "body.checkout-mobile-flow .checkout-page",
+      "body.checkout-mobile-flow .checkout-grid",
+      "body.checkout-mobile-flow .checkout-grid *",
+      "body.checkout-mobile-flow .checkout-stepper",
+      "body.checkout-mobile-flow .checkout-step-wrap",
+      "body.checkout-mobile-flow .checkout-step-panel",
+      "body.checkout-mobile-flow .checkout-step-panel *",
+      "body.checkout-mobile-flow .checkout-mobile-actionbar",
+      "body.checkout-mobile-flow .checkout-mobile-actionbar *"
+    ];
+
+    document.querySelectorAll(selectors.join(",")).forEach((el) => {
+      if (!(el instanceof HTMLElement)) return;
+      el.style.maxWidth = "";
+      el.style.minWidth = "";
+      el.style.boxSizing = "";
+      el.style.overflowX = "";
+    });
+
+    const back = document.querySelector(".checkout-mobile-back");
+    if (back instanceof HTMLElement) {
+      back.style.display = "";
+      back.style.maxWidth = "";
+      back.style.whiteSpace = "";
+      back.style.overflow = "";
+      back.style.textOverflow = "";
+    }
+  } catch {}
+}
+function enforceCheckoutMobileNoXScroll() {
+  try {
+    if (!document.body?.classList.contains("checkout-mobile-flow")) return;
+    if (window.innerWidth > 900) {
+      clearCheckoutMobileInlineStyles();
+      return;
+    }
+
+    const html = document.documentElement;
+    const body = document.body;
+    html.style.overflowX = "hidden";
+    body.style.overflowX = "hidden";
+
+    const viewportWidth = html.clientWidth || window.innerWidth || 0;
+    const selectors = [
+      "body.checkout-mobile-flow .site-header",
+      "body.checkout-mobile-flow .site-header *",
+      "body.checkout-mobile-flow .checkout-page",
+      "body.checkout-mobile-flow .checkout-grid",
+      "body.checkout-mobile-flow .checkout-grid *",
+      "body.checkout-mobile-flow .checkout-stepper",
+      "body.checkout-mobile-flow .checkout-step-wrap",
+      "body.checkout-mobile-flow .checkout-step-panel",
+      "body.checkout-mobile-flow .checkout-step-panel *",
+      "body.checkout-mobile-flow .checkout-mobile-actionbar",
+      "body.checkout-mobile-flow .checkout-mobile-actionbar *"
+    ];
+
+    document.querySelectorAll(selectors.join(",")).forEach((el) => {
+      if (!(el instanceof HTMLElement)) return;
+      el.style.maxWidth = "100%";
+      el.style.minWidth = "0";
+      el.style.boxSizing = "border-box";
+
+      const rect = el.getBoundingClientRect();
+      const exceeds = rect.left < -1 || rect.right > (viewportWidth + 1);
+      if (exceeds) {
+        el.style.overflowX = "hidden";
+      }
+    });
+
+    const back = document.querySelector(".checkout-mobile-back");
+    if (back instanceof HTMLElement) {
+      back.style.display = "inline-flex";
+      back.style.maxWidth = "100%";
+      back.style.whiteSpace = "nowrap";
+      back.style.overflow = "hidden";
+      back.style.textOverflow = "ellipsis";
+    }
+  } catch {}
+}
+
 function updateCheckoutBackLink(step) {
   const back = document.querySelector(".checkout-mobile-back");
   if (!back) return;
 
-  const currentStep = Math.min(3, Math.max(1, Number(step || 1)));
+  const currentStep = Math.min(2, Math.max(1, Number(step || 1)));
   if (currentStep === 1) {
     back.href = "cart.html";
     back.dataset.backStep = "";
@@ -117,19 +208,12 @@ function updateCheckoutBackLink(step) {
     back.setAttribute("title", "Back to cart");
     return;
   }
-  if (currentStep === 2) {
-    back.href = "#";
-    back.dataset.backStep = "1";
-    back.textContent = "<Back to Buyer Details";
-    back.setAttribute("aria-label", "Back to Buyer Details");
-    back.setAttribute("title", "Back to Buyer Details");
-    return;
-  }
+
   back.href = "#";
-  back.dataset.backStep = "2";
-  back.textContent = "<Back to Payment";
-  back.setAttribute("aria-label", "Back to Payment");
-  back.setAttribute("title", "Back to Payment");
+  back.dataset.backStep = "1";
+  back.textContent = "<Back to Buyer Details";
+  back.setAttribute("aria-label", "Back to Buyer Details");
+  back.setAttribute("title", "Back to Buyer Details");
 }
 
 function updateMobileCheckoutBar(step) {
@@ -141,9 +225,10 @@ function updateMobileCheckoutBar(step) {
   const mobileSteps = Array.from(document.querySelectorAll("#checkoutMobileSteps .checkout-mobile-step"));
   if (!bar || !totalEl || !statusEl || !btn) return;
 
-  const currentStep = Math.min(3, Math.max(1, Number(step || window.__checkoutCurrentStep || 1)));
+  const currentStep = Math.min(2, Math.max(1, Number(step || window.__checkoutCurrentStep || 1)));
   window.__checkoutCurrentStep = currentStep;
   updateCheckoutBackLink(currentStep);
+
   mobileSteps.forEach((item) => {
     const itemStep = Number(item.dataset.step || 0);
     item.classList.toggle("is-active", itemStep === currentStep);
@@ -155,14 +240,8 @@ function updateMobileCheckoutBar(step) {
 
   if (currentStep === 1) {
     statusEl.textContent = "Ready for payment";
-    btn.textContent = "Continue to Payment";
+    btn.textContent = "Continue to Payment & Review";
     btn.dataset.checkoutAction = "step-2";
-    return;
-  }
-  if (currentStep === 2) {
-    statusEl.textContent = "Ready to review";
-    btn.textContent = "Continue to Review";
-    btn.dataset.checkoutAction = "step-3";
     return;
   }
 
@@ -423,7 +502,7 @@ async function sendOrderEmailsViaEmailJs({
       (item) => `<tr>
         <td width="50%" style="padding:8px 0 8px 5px; font-size:12px;">${item.name}</td>
         <td width="20%" align="center" style="padding:8px 0; font-size:12px;">${item.quantity}</td>
-        <td width="30%" align="right" style="padding:8px 5px 8px 0; font-size:12px;">GH₵ ${item.subtotal.toFixed(2)}</td>
+        <td width="30%" align="right" style="padding:8px 5px 8px 0; font-size:12px;">GHâ‚µ ${item.subtotal.toFixed(2)}</td>
       </tr>`
     )
     .join("");
@@ -436,8 +515,8 @@ async function sendOrderEmailsViaEmailJs({
           <div style="font-size: 13px; color: #666; margin: 4px 0;">ID: ${item.id}</div>
           <div style="font-size: 13px;">
             <span style="color: #333;">Quantity:</span> ${item.quantity} x
-            <span style="color: #333;">GH₵ ${item.price.toFixed(2)}</span> =
-            <strong style="color: #d9534f;">GH₵ ${item.subtotal.toFixed(2)}</strong>
+            <span style="color: #333;">GHâ‚µ ${item.price.toFixed(2)}</span> =
+            <strong style="color: #d9534f;">GHâ‚µ ${item.subtotal.toFixed(2)}</strong>
           </div>
         </div>`
     )
@@ -453,7 +532,7 @@ async function sendOrderEmailsViaEmailJs({
     order_id: String(orderId),
     order_subtotal: orderTotal.toFixed(2),
     order_total: orderTotal.toFixed(2),
-    currency_symbol: "GH₵ ",
+    currency_symbol: "GHâ‚µ ",
     order_items: orderItemsTableRows || "<tr><td colspan='3'>No items listed</td></tr>",
     order_date: orderDate,
     payment_method: paymentMethod || "Not specified",
@@ -478,7 +557,7 @@ async function sendOrderEmailsViaEmailJs({
     customer_name: customerName || "Customer",
     customer_email: String(customerEmail || "").trim(),
     customer_phone: customerPhone || "",
-    order_total: `GH₵ ${orderTotal.toFixed(2)}`,
+    order_total: `GHâ‚µ ${orderTotal.toFixed(2)}`,
     order_items: orderItemsBlocks || "<div>No items listed</div>",
     order_date: orderDate,
     order_time: orderTime,
@@ -1034,7 +1113,6 @@ function initCheckoutStepFlow() {
   const phoneInput = document.getElementById("phone");
   const addressInput = document.getElementById("address");
   const cityInput = document.getElementById("city");
-  const notesInput = document.getElementById("notes");
   const affiliateInput = document.getElementById("affiliate-code");
   const affiliateStatus = document.getElementById("affiliate-code-status");
   const paymentMethodSelect = document.getElementById("payment-method");
@@ -1058,8 +1136,7 @@ function initCheckoutStepFlow() {
   stepper.className = "checkout-stepper";
   stepper.innerHTML = `
     <div class="checkout-stepper-item is-active" data-stepper-index="1"><span>1</span><p>Buyer Details</p></div>
-    <div class="checkout-stepper-item" data-stepper-index="2"><span>2</span><p>Payment & Discount</p></div>
-    <div class="checkout-stepper-item" data-stepper-index="3"><span>3</span><p>Review & Place Order</p></div>
+    <div class="checkout-stepper-item" data-stepper-index="2"><span>2</span><p>Payment & Review</p></div>
   `;
 
   const stepWrap = document.createElement("div");
@@ -1073,12 +1150,7 @@ function initCheckoutStepFlow() {
   const step2 = document.createElement("section");
   step2.className = "checkout-step-panel";
   step2.dataset.step = "2";
-  step2.innerHTML = `<h4>Manual Payment & Discount</h4><p class="checkout-step-note">Choose payment method, view account details, and upload payment proof.</p>`;
-
-  const step3 = document.createElement("section");
-  step3.className = "checkout-step-panel";
-  step3.dataset.step = "3";
-  step3.innerHTML = `<h4>Review & Place Order</h4><p class="checkout-step-note">Review totals and place your order when ready.</p>`;
+  step2.innerHTML = `<h4>Payment & Review</h4><p class="checkout-step-note">Choose payment method, upload proof, apply discount, then place your order.</p>`;
 
   const moveIf = (el, target) => {
     if (el && target && el.parentElement) target.appendChild(el);
@@ -1108,39 +1180,45 @@ function initCheckoutStepFlow() {
   moveIf(paymentInstructions, step2);
   moveIf(paymentProof, step2);
 
-  const aside = document.querySelector("aside.order");
-  const discountRow = aside?.querySelector(".discount-row");
+  const discountRow = discountInput?.closest(".discount-row") || null;
   if (discountInput && applyDiscountBtn) {
     const discountBlock = document.createElement("div");
     discountBlock.className = "checkout-discount-block";
-    discountBlock.innerHTML = `<label for="discount-code">Discount Code (optional)</label>`;
-    moveIf(discountRow, discountBlock);
+
+    const discountLabel = document.createElement("label");
+    discountLabel.setAttribute("for", "discount-code");
+    discountLabel.textContent = "Discount Code (optional)";
+
+    const discountActions = document.createElement("div");
+    discountActions.className = "checkout-discount-actions";
+
+    moveIf(discountInput, discountActions);
+    moveIf(applyDiscountBtn, discountActions);
+
+    discountBlock.appendChild(discountLabel);
+    discountBlock.appendChild(discountActions);
     moveIf(discountStatus, discountBlock);
     step2.appendChild(discountBlock);
+
+    if (discountRow && discountRow.parentElement && discountRow.children.length === 0) {
+      discountRow.remove();
+    }
   }
-  moveIf(placeOrderBtn, step3);
+
+  moveIf(placeOrderBtn, step2);
 
   const actions1 = document.createElement("div");
   actions1.className = "checkout-step-actions";
-  actions1.innerHTML = `<button type="button" class="checkout-step-next" data-next-step="2">Continue to Payment</button>`;
+  actions1.innerHTML = `<button type="button" class="checkout-step-next" data-next-step="2">Continue to Payment & Review</button>`;
   step1.appendChild(actions1);
 
   const actions2 = document.createElement("div");
-  actions2.className = "checkout-step-actions dual";
-  actions2.innerHTML = `
-    <button type="button" class="checkout-step-back" data-prev-step="1">Back to Details</button>
-    <button type="button" class="checkout-step-next" data-next-step="3">Continue to Review</button>
-  `;
-  step2.appendChild(actions2);
-
-  const actions3 = document.createElement("div");
-  actions3.className = "checkout-step-actions";
-  actions3.innerHTML = `<button type="button" class="checkout-step-back" data-prev-step="2">Back to Payment</button>`;
-  step3.prepend(actions3);
+  actions2.className = "checkout-step-actions";
+  actions2.innerHTML = `<button type="button" class="checkout-step-back" data-prev-step="1">Back to Details</button>`;
+  step2.prepend(actions2);
 
   stepWrap.appendChild(step1);
   stepWrap.appendChild(step2);
-  stepWrap.appendChild(step3);
 
   heading.insertAdjacentElement("afterend", stepper);
   stepper.insertAdjacentElement("afterend", stepWrap);
@@ -1149,12 +1227,15 @@ function initCheckoutStepFlow() {
   hiddenInputs.forEach((el) => form.appendChild(el));
 
   let currentStep = 1;
-  const panels = [step1, step2, step3];
+  const panels = [step1, step2];
   const stepItems = Array.from(stepper.querySelectorAll(".checkout-stepper-item"));
 
   const showStep = (step, opts = {}) => {
     const skipScroll = Boolean(opts.skipScroll);
-    currentStep = Math.min(3, Math.max(1, Number(step) || 1));
+    currentStep = Math.min(2, Math.max(1, Number(step) || 1));
+    if (heading) {
+      heading.textContent = currentStep === 2 ? "Payment & Review" : "Billing Details";
+    }
     panels.forEach((panel, idx) => {
       panel.classList.toggle("is-active", idx + 1 === currentStep);
     });
@@ -1164,6 +1245,7 @@ function initCheckoutStepFlow() {
       item.classList.toggle("is-complete", index < currentStep);
     });
     updateMobileCheckoutBar(currentStep);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
     try {
       sessionStorage.setItem(CHECKOUT_STEP_KEY, String(currentStep));
     } catch {}
@@ -1212,11 +1294,7 @@ function initCheckoutStepFlow() {
         showStep(2);
         return;
       }
-      if (currentStep === 2) {
-        if (!validateStep2()) return;
-        showStep(3);
-        return;
-      }
+      if (!validateStep2()) return;
       placeOrderBtn?.click();
     });
   }
@@ -1226,7 +1304,6 @@ function initCheckoutStepFlow() {
     if (nextBtn) {
       const targetStep = Number(nextBtn.dataset.nextStep || 0);
       if (currentStep === 1 && !validateStep1()) return;
-      if (currentStep === 2 && !validateStep2()) return;
       showStep(targetStep);
       return;
     }
@@ -1241,7 +1318,7 @@ function initCheckoutStepFlow() {
   try {
     const stored = Number(sessionStorage.getItem(CHECKOUT_STEP_KEY) || "1");
     if (Number.isFinite(stored)) {
-      restoreStep = Math.min(3, Math.max(1, stored));
+      restoreStep = Math.min(2, Math.max(1, stored));
     }
   } catch {}
   showStep(restoreStep, { skipScroll: true });
@@ -1321,6 +1398,7 @@ function handleCheckout(products) {
       if (affiliateNote) affiliateNote.style.display = "none";
       affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, referralCount: 0, totalEarned: 0, valid: false };
       await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
       return;
     }
 
@@ -1351,17 +1429,20 @@ function handleCheckout(products) {
           valid: true,
         };
         await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
       } else {
         affiliateStatusEl.textContent = data.message || "Affiliate code not found.";
         affiliateStatusEl.style.color = "#b91c1c";
         affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, referralCount: 0, totalEarned: 0, valid: false };
         await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
       }
     } catch {
       affiliateStatusEl.textContent = "Could not validate affiliate code right now.";
       affiliateStatusEl.style.color = "#b45309";
       affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, referralCount: 0, totalEarned: 0, valid: false };
       await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
     }
   }
 
@@ -1509,6 +1590,7 @@ function handleCheckout(products) {
             amount: (subtotal * Number(discountCheck.percent || 0)) / 100,
           };
           await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
           if (discountCheck.uncertain) {
             showMsg("Discount verification is delayed. We will verify it on the server.", true);
           }
@@ -1516,6 +1598,7 @@ function handleCheckout(products) {
           finalDiscountCode = "";
           discountState = { code: null, percent: 0, amount: 0 };
           await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
           showMsg("Discount code is invalid/unavailable right now. Continuing without discount.", false);
         }
       }
@@ -1758,6 +1841,8 @@ function handleCheckout(products) {
 // ----------------------
   document.addEventListener("DOMContentLoaded", async () => {
     setupCheckoutMobileLayout();
+    enforceCheckoutMobileNoXScroll();
+    window.addEventListener("resize", enforceCheckoutMobileNoXScroll, { passive: true });
     setTimeout(hidePageLoader, 9000);
     if (hasPendingOrderMarker() && isCheckoutInProgress()) {
       setProcessingOverlay(true, "Finalizing your order. Please wait...");
@@ -1782,6 +1867,7 @@ function handleCheckout(products) {
       } catch {}
     }
     await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
     setProcessingOverlay(false);
     requestAnimationFrame(() => {
       setTimeout(hidePageLoader, 120);
@@ -1808,6 +1894,7 @@ function handleCheckout(products) {
       if (!code) {
         discountState = { code: null, percent: 0, amount: 0 };
         await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
         discountStatusEl.style.display = "none";
         discountStatusEl.textContent = "";
         discountStatusEl.style.color = "";
@@ -1834,17 +1921,20 @@ function handleCheckout(products) {
           };
           discountState.amount = (subtotal * discountState.percent) / 100;
           await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
           discountStatusEl.textContent = `Discount code is valid (${Number(data.percent || 0)}% off).`;
           discountStatusEl.style.color = "#15803d";
         } else {
           discountState = { code: null, percent: 0, amount: 0 };
           await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
           discountStatusEl.textContent = data.message || "Discount code not valid.";
           discountStatusEl.style.color = "#b91c1c";
         }
       } catch {
         discountState = { code: null, percent: 0, amount: 0 };
         await renderOrder(products);
+    requestAnimationFrame(enforceCheckoutMobileNoXScroll);
         discountStatusEl.textContent = "Could not validate discount code right now.";
         discountStatusEl.style.color = "#b45309";
       }
@@ -1911,6 +2001,8 @@ function handleCheckout(products) {
     }
   });
 })();
+
+
 
 
 

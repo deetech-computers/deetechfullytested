@@ -1,31 +1,8 @@
 {
   "version": 1,
-  "generatedAt": "2026-03-08T19:57:01.276Z",
+  "generatedAt": "2026-03-25T07:38:12.271Z",
   "total": 4,
   "products": [
-    {
-      "_id": "698f2f7532c9c8c8f264dba5",
-      "id": "698f2f7532c9c8c8f264dba5",
-      "name": "Samsung 24\" Monitor",
-      "short_description": "24\" IPS Panel, 1920x1080, 75Hz",
-      "description": "fdcfgchggvhg",
-      "specs": {},
-      "brand": "Samsung",
-      "category": "monitors",
-      "price": 500,
-      "countInStock": 8,
-      "isFeatured": true,
-      "homeSections": [],
-      "image_url": "https://i.postimg.cc/yNDS30H2/mouse.webp",
-      "image": "https://i.postimg.cc/yNDS30H2/mouse.webp",
-      "images": [
-        "https://i.postimg.cc/yNDS30H2/mouse.webp",
-        "https://i.postimg.cc/9XDv6SSp/photo_2025-09-07_12-36-21.jpg"
-      ],
-      "sold": 10,
-      "createdAt": "2026-02-13T14:04:37.222Z",
-      "updatedAt": "2026-03-05T13:02:13.413Z"
-    },
     {
       "_id": "699ebc276b0ecfb1276336d3",
       "id": "699ebc276b0ecfb1276336d3",
@@ -42,7 +19,7 @@
       "brand": "Dell",
       "category": "laptops",
       "price": 4650,
-      "countInStock": 9,
+      "countInStock": 8,
       "isFeatured": false,
       "homeSections": [
         "popular",
@@ -51,11 +28,13 @@
       "image_url": "https://i.postimg.cc/bJK3wtS5/photo-2026-02-25-01-05-01.jpg",
       "image": "https://i.postimg.cc/bJK3wtS5/photo-2026-02-25-01-05-01.jpg",
       "images": [
-        "https://i.postimg.cc/bJK3wtS5/photo-2026-02-25-01-05-01.jpg"
+        "https://i.postimg.cc/bJK3wtS5/photo-2026-02-25-01-05-01.jpg",
+        "https://res.cloudinary.com/dkszcirn5/image/upload/v1774051598/deetech/products/x0zlouxypslbooiz2ril.jpg",
+        "https://res.cloudinary.com/dkszcirn5/image/upload/v1774051644/deetech/products/kk2097nvud2n4tuii9za.jpg"
       ],
-      "sold": 10,
+      "sold": 11,
       "createdAt": "2026-02-25T09:08:55.589Z",
-      "updatedAt": "2026-03-05T13:02:14.743Z"
+      "updatedAt": "2026-03-21T00:07:24.741Z"
     },
     {
       "_id": "699ee376d801f3a100d071fb",
@@ -75,7 +54,7 @@
       "brand": "HP",
       "category": "laptops",
       "price": 2550,
-      "countInStock": 9,
+      "countInStock": 8,
       "isFeatured": false,
       "homeSections": [
         "popular",
@@ -84,11 +63,12 @@
       "image_url": "https://i.postimg.cc/zDc2pp8T/photo-2026-02-25-01-04-29.jpg",
       "image": "https://i.postimg.cc/zDc2pp8T/photo-2026-02-25-01-04-29.jpg",
       "images": [
-        "https://i.postimg.cc/zDc2pp8T/photo-2026-02-25-01-04-29.jpg"
+        "https://i.postimg.cc/zDc2pp8T/photo-2026-02-25-01-04-29.jpg",
+        "https://res.cloudinary.com/dkszcirn5/image/upload/v1774051678/deetech/products/n9defz3nqffncwko5htb.jpg"
       ],
-      "sold": 8,
+      "sold": 9,
       "createdAt": "2026-02-25T11:56:38.351Z",
-      "updatedAt": "2026-03-05T13:02:17.505Z"
+      "updatedAt": "2026-03-21T00:07:59.023Z"
     },
     {
       "_id": "699ff57cfe3829090bbc6cc2",
@@ -113,14 +93,40 @@
       "homeSections": [
         "best_laptops"
       ],
-      "image_url": "https://i.postimg.cc/jdxcsPpC/photo-2026-02-25-23-21-01.jpg",
-      "image": "https://i.postimg.cc/jdxcsPpC/photo-2026-02-25-23-21-01.jpg",
+      "image_url": "https://i.postimg.cc/yNDS30H2/mouse.webp",
+      "image": "https://i.postimg.cc/yNDS30H2/mouse.webp",
       "images": [
-        "https://i.postimg.cc/jdxcsPpC/photo-2026-02-25-23-21-01.jpg"
+        "https://i.postimg.cc/yNDS30H2/mouse.webp"
       ],
       "sold": 5,
       "createdAt": "2026-02-26T07:25:48.988Z",
-      "updatedAt": "2026-03-05T13:33:57.247Z"
+      "updatedAt": "2026-03-18T18:50:33.466Z"
+    },
+    {
+      "_id": "69c38efdf179cca7692a2cac",
+      "id": "69c38efdf179cca7692a2cac",
+      "name": "Dahua B200 Series – 22",
+      "short_description": "Dahua B200 Series – 22″ Full HD LED Monitor",
+      "description": "Dahua B200 Series-Crisp display(BRAND NEW IN BOX)",
+      "specs": {
+        "Display Size": "22 inches",
+        "Resolution": "Full HD (1920 × 1080)",
+        "Refresh Rate": "100HZ"
+      },
+      "brand": "AOC",
+      "category": "monitors",
+      "price": 1500,
+      "countInStock": 5,
+      "isFeatured": false,
+      "homeSections": [],
+      "image_url": "https://i.postimg.cc/gj2zQ9dR/photo-2026-03-25-00-26-04.jpg",
+      "image": "https://i.postimg.cc/gj2zQ9dR/photo-2026-03-25-00-26-04.jpg",
+      "images": [
+        "https://i.postimg.cc/gj2zQ9dR/photo-2026-03-25-00-26-04.jpg"
+      ],
+      "sold": 0,
+      "createdAt": "2026-03-25T07:30:05.734Z",
+      "updatedAt": "2026-03-25T07:30:05.734Z"
     }
   ]
 }
