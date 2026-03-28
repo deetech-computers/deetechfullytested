@@ -22,6 +22,8 @@ const {
 const { getToken, clearUser, clearToken } = window.auth || {};
 const PENDING_ORDER_KEY = "checkout_pending_order";
 const CHECKOUT_IN_PROGRESS_KEY = "checkout_in_progress";
+const CHECKOUT_STEP_KEY = "checkout_step";
+const CHECKOUT_DRAFT_KEY = "checkout_draft_v1";
 const isOffline = () => typeof navigator !== "undefined" && navigator.onLine === false;
 
 // ----------------------
@@ -72,6 +74,101 @@ function setProcessingOverlay(visible, text = "") {
   if (textEl && text) textEl.textContent = text;
   overlay.classList.toggle("show", Boolean(visible));
   overlay.setAttribute("aria-hidden", visible ? "false" : "true");
+}
+function setupCheckoutMobileLayout() {
+  const path = String(window.location.pathname || "").toLowerCase();
+  if (!path.includes("checkout.html")) return;
+
+  document.body.classList.add("checkout-mobile-flow");
+
+  const existingMobileNav = document.getElementById("mobileBottomNav");
+  if (existingMobileNav) existingMobileNav.remove();
+  document.body.classList.remove("has-mobile-bottom-nav");
+
+  const navContainer = document.querySelector(".site-header .nav-container");
+  if (navContainer && !navContainer.querySelector(".checkout-mobile-back")) {
+    const back = document.createElement("a");
+    back.className = "checkout-mobile-back";
+    back.href = "cart.html";
+    back.textContent = "<Back to cart";
+    back.setAttribute("aria-label", "Back to cart");
+    back.setAttribute("title", "Back to cart");
+    back.addEventListener("click", (ev) => {
+      const targetStep = Number(back.dataset.backStep || 0);
+      if (targetStep > 0 && typeof window.__checkoutShowStep === "function") {
+        ev.preventDefault();
+        window.__checkoutShowStep(targetStep);
+      }
+    });
+    navContainer.prepend(back);
+  }
+}
+
+function updateCheckoutBackLink(step) {
+  const back = document.querySelector(".checkout-mobile-back");
+  if (!back) return;
+
+  const currentStep = Math.min(3, Math.max(1, Number(step || 1)));
+  if (currentStep === 1) {
+    back.href = "cart.html";
+    back.dataset.backStep = "";
+    back.textContent = "<Back to cart";
+    back.setAttribute("aria-label", "Back to cart");
+    back.setAttribute("title", "Back to cart");
+    return;
+  }
+  if (currentStep === 2) {
+    back.href = "#";
+    back.dataset.backStep = "1";
+    back.textContent = "<Back to Buyer Details";
+    back.setAttribute("aria-label", "Back to Buyer Details");
+    back.setAttribute("title", "Back to Buyer Details");
+    return;
+  }
+  back.href = "#";
+  back.dataset.backStep = "2";
+  back.textContent = "<Back to Payment";
+  back.setAttribute("aria-label", "Back to Payment");
+  back.setAttribute("title", "Back to Payment");
+}
+
+function updateMobileCheckoutBar(step) {
+  const bar = document.getElementById("checkoutMobileBar");
+  const totalEl = document.getElementById("checkoutMobileTotal");
+  const statusEl = document.getElementById("checkoutMobileStatus");
+  const btn = document.getElementById("checkoutMobilePrimaryBtn");
+  const orderTotalEl = document.getElementById("order-total");
+  const mobileSteps = Array.from(document.querySelectorAll("#checkoutMobileSteps .checkout-mobile-step"));
+  if (!bar || !totalEl || !statusEl || !btn) return;
+
+  const currentStep = Math.min(3, Math.max(1, Number(step || window.__checkoutCurrentStep || 1)));
+  window.__checkoutCurrentStep = currentStep;
+  updateCheckoutBackLink(currentStep);
+  mobileSteps.forEach((item) => {
+    const itemStep = Number(item.dataset.step || 0);
+    item.classList.toggle("is-active", itemStep === currentStep);
+    item.classList.toggle("is-complete", itemStep > 0 && itemStep < currentStep);
+  });
+
+  const totalText = String(orderTotalEl?.textContent || "GHC 0.00").trim() || "GHC 0.00";
+  totalEl.textContent = totalText;
+
+  if (currentStep === 1) {
+    statusEl.textContent = "Ready for payment";
+    btn.textContent = "Continue to Payment";
+    btn.dataset.checkoutAction = "step-2";
+    return;
+  }
+  if (currentStep === 2) {
+    statusEl.textContent = "Ready to review";
+    btn.textContent = "Continue to Review";
+    btn.dataset.checkoutAction = "step-3";
+    return;
+  }
+
+  statusEl.textContent = "Ready to order";
+  btn.textContent = `Review Order - ${totalText}`;
+  btn.dataset.checkoutAction = "place-order";
 }
 
 function normalizeSavedOrderResponse(payload) {
@@ -225,6 +322,55 @@ function isCheckoutInProgress() {
   }
 }
 
+function saveCheckoutDraft() {
+  const payload = {
+    name: String(document.getElementById("name")?.value || ""),
+    email: String(document.getElementById("email")?.value || ""),
+    phone: String(document.getElementById("phone")?.value || ""),
+    address: String(document.getElementById("address")?.value || ""),
+    city: String(document.getElementById("city")?.value || ""),
+    notes: String(document.getElementById("notes")?.value || ""),
+    affiliateCode: String(document.getElementById("affiliate-code")?.value || ""),
+    discountCode: String(document.getElementById("discount-code")?.value || ""),
+    paymentMethod: String(document.getElementById("payment-method")?.value || ""),
+  };
+  try {
+    sessionStorage.setItem(CHECKOUT_DRAFT_KEY, JSON.stringify(payload));
+  } catch {}
+}
+
+function restoreCheckoutDraft() {
+  let draft = null;
+  try {
+    draft = JSON.parse(sessionStorage.getItem(CHECKOUT_DRAFT_KEY) || "null");
+  } catch {
+    draft = null;
+  }
+  if (!draft || typeof draft !== "object") return;
+
+  const setIf = (id, value) => {
+    if (value == null) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = String(value);
+  };
+
+  setIf("name", draft.name);
+  setIf("email", draft.email);
+  setIf("phone", draft.phone);
+  setIf("address", draft.address);
+  setIf("city", draft.city);
+  setIf("notes", draft.notes);
+  setIf("affiliate-code", draft.affiliateCode);
+  setIf("discount-code", draft.discountCode);
+
+  const payment = String(draft.paymentMethod || "").toLowerCase();
+  const methodEl = document.getElementById("payment-method");
+  if (payment && methodEl) {
+    methodEl.value = payment;
+    setPaymentInstructions(payment);
+  }
+}
 function canUseEmailJsOrders() {
   return Boolean(
     window.emailjs &&
@@ -676,7 +822,7 @@ async function loadProducts() {
 // Render Order Summary
 // ----------------------
 let discountState = { code: null, percent: 0, amount: 0 };
-let affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, valid: false };
+let affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, referralCount: 0, totalEarned: 0, valid: false };
 function getCartSubtotal() {
   const cart = window.cart?.getLocalCart?.() || [];
   return cart.reduce(
@@ -735,10 +881,16 @@ async function renderOrder(products) {
   const affiliateRow = document.getElementById("checkoutAffiliateRow");
   const affiliateAmount = document.getElementById("checkoutAffiliateAmount");
   const affiliateLabel = document.getElementById("checkoutAffiliateLabel");
+  const affiliateImpact = document.getElementById("checkoutAffiliateImpact");
+  const affiliateSupportName = document.getElementById("checkoutAffiliateSupportName");
+  const affiliateSupportAmount = document.getElementById("checkoutAffiliateSupportAmount");
+  const affiliateReferrals = document.getElementById("checkoutAffiliateReferrals");
+  const affiliateTotalEarned = document.getElementById("checkoutAffiliateTotalEarned");
+
+  const validAffiliate = affiliateUiState?.valid && Number(affiliateUiState?.commissionAmount || 0) > 0;
   if (affiliateRow && affiliateAmount) {
-    const valid = affiliateUiState?.valid && affiliateUiState?.commissionAmount > 0;
-    affiliateRow.style.display = valid ? "flex" : "none";
-    if (valid) {
+    affiliateRow.style.display = validAffiliate ? "flex" : "none";
+    if (validAffiliate) {
       affiliateAmount.textContent = money(affiliateUiState.commissionAmount);
       if (affiliateLabel) {
         affiliateLabel.textContent = affiliateUiState.name
@@ -747,6 +899,31 @@ async function renderOrder(products) {
       }
     }
   }
+
+  if (affiliateImpact) {
+    affiliateImpact.style.display = validAffiliate ? "block" : "none";
+    if (validAffiliate) {
+      const referralCount = Math.max(Number(affiliateUiState.referralCount || 0), 0) + 1;
+      const trackedTotal = Number(affiliateUiState.totalEarned || 0);
+      const projectedTotal = trackedTotal > 0
+        ? trackedTotal + Number(affiliateUiState.commissionAmount || 0)
+        : Number(affiliateUiState.commissionAmount || 0);
+
+      if (affiliateSupportName) {
+        affiliateSupportName.textContent = affiliateUiState.name || "this affiliate";
+      }
+      if (affiliateSupportAmount) {
+        affiliateSupportAmount.textContent = money(affiliateUiState.commissionAmount || 0);
+      }
+      if (affiliateReferrals) {
+        affiliateReferrals.textContent = `This will be their ${referralCount} referral`;
+      }
+      if (affiliateTotalEarned) {
+        affiliateTotalEarned.textContent = money(projectedTotal);
+      }
+    }
+  }
+  updateMobileCheckoutBar(window.__checkoutCurrentStep || 1);
 }
 
 // ----------------------
@@ -805,7 +982,7 @@ function setPaymentInstructions(methodRaw) {
     ]);
   } else if (method === "bank") {
     html = renderPaymentInfo("Bank Transfer", [
-      { label: "Bank", value: "CALBANK" },
+      { label: "Bank", value: "Calbank" },
       { label: "Account Number", value: "1400009398769" },
       { label: "Account Name", value: "DEETEK 360 Enterprise (DEETECH COMPUTERS)" },
     ]);
@@ -975,7 +1152,8 @@ function initCheckoutStepFlow() {
   const panels = [step1, step2, step3];
   const stepItems = Array.from(stepper.querySelectorAll(".checkout-stepper-item"));
 
-  const showStep = (step) => {
+  const showStep = (step, opts = {}) => {
+    const skipScroll = Boolean(opts.skipScroll);
     currentStep = Math.min(3, Math.max(1, Number(step) || 1));
     panels.forEach((panel, idx) => {
       panel.classList.toggle("is-active", idx + 1 === currentStep);
@@ -985,10 +1163,17 @@ function initCheckoutStepFlow() {
       item.classList.toggle("is-active", index === currentStep);
       item.classList.toggle("is-complete", index < currentStep);
     });
+    updateMobileCheckoutBar(currentStep);
     try {
-      stepper.scrollIntoView({ behavior: "smooth", block: "start" });
+      sessionStorage.setItem(CHECKOUT_STEP_KEY, String(currentStep));
     } catch {}
+    if (!skipScroll) {
+      try {
+        stepper.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch {}
+    }
   };
+  window.__checkoutShowStep = showStep;
 
   const validateStep1 = () => {
     const email = String(emailInput?.value || "").trim();
@@ -1018,6 +1203,24 @@ function initCheckoutStepFlow() {
     return true;
   };
 
+  const mobilePrimaryBtn = document.getElementById("checkoutMobilePrimaryBtn");
+  if (mobilePrimaryBtn && !mobilePrimaryBtn.dataset.wired) {
+    mobilePrimaryBtn.dataset.wired = "1";
+    mobilePrimaryBtn.addEventListener("click", () => {
+      if (currentStep === 1) {
+        if (!validateStep1()) return;
+        showStep(2);
+        return;
+      }
+      if (currentStep === 2) {
+        if (!validateStep2()) return;
+        showStep(3);
+        return;
+      }
+      placeOrderBtn?.click();
+    });
+  }
+
   form.addEventListener("click", (ev) => {
     const nextBtn = ev.target.closest(".checkout-step-next");
     if (nextBtn) {
@@ -1033,6 +1236,15 @@ function initCheckoutStepFlow() {
       showStep(targetStep);
     }
   });
+
+  let restoreStep = 1;
+  try {
+    const stored = Number(sessionStorage.getItem(CHECKOUT_STEP_KEY) || "1");
+    if (Number.isFinite(stored)) {
+      restoreStep = Math.min(3, Math.max(1, stored));
+    }
+  } catch {}
+  showStep(restoreStep, { skipScroll: true });
 }
 
 // ----------------------
@@ -1107,7 +1319,7 @@ function handleCheckout(products) {
       affiliateStatusEl.textContent = "";
       affiliateStatusEl.style.color = "";
       if (affiliateNote) affiliateNote.style.display = "none";
-      affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, valid: false };
+      affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, referralCount: 0, totalEarned: 0, valid: false };
       await renderOrder(products);
       return;
     }
@@ -1134,19 +1346,21 @@ function handleCheckout(products) {
           name: String(data.ownerName || "").trim(),
           commissionRate: rate,
           commissionAmount: rate > 0 ? (subtotal * rate) / 100 : 0,
+          referralCount: Number(data.totalReferrals || data.referralCount || 0),
+          totalEarned: Number(data.totalEarned || data.totalCommission || 0),
           valid: true,
         };
         await renderOrder(products);
       } else {
         affiliateStatusEl.textContent = data.message || "Affiliate code not found.";
         affiliateStatusEl.style.color = "#b91c1c";
-        affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, valid: false };
+        affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, referralCount: 0, totalEarned: 0, valid: false };
         await renderOrder(products);
       }
     } catch {
       affiliateStatusEl.textContent = "Could not validate affiliate code right now.";
       affiliateStatusEl.style.color = "#b45309";
-      affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, valid: false };
+      affiliateUiState = { code: "", name: "", commissionRate: 0, commissionAmount: 0, referralCount: 0, totalEarned: 0, valid: false };
       await renderOrder(products);
     }
   }
@@ -1495,16 +1709,22 @@ function handleCheckout(products) {
       };
       localStorage.setItem("lastOrder", JSON.stringify(summary));
       localStorage.setItem("orderSent", "true");
+      try { sessionStorage.removeItem(CHECKOUT_STEP_KEY); } catch {}
+      try { sessionStorage.removeItem(CHECKOUT_DRAFT_KEY); } catch {}
       clearPendingOrderMarker();
 
       try {
         if (window.cart?.clearCart) {
           await window.cart.clearCart();
         }
+      } catch (err) {
+        console.warn("Failed to clear server cart:", err);
+      }
+      try {
         localStorage.removeItem("cart");
         document.dispatchEvent(new Event("cart-updated"));
       } catch (err) {
-        console.warn("Failed to clear cart:", err);
+        console.warn("Failed to clear local cart:", err);
       }
 
       setTimeout(() => {
@@ -1537,6 +1757,7 @@ function handleCheckout(products) {
 // Init
 // ----------------------
   document.addEventListener("DOMContentLoaded", async () => {
+    setupCheckoutMobileLayout();
     setTimeout(hidePageLoader, 9000);
     if (hasPendingOrderMarker() && isCheckoutInProgress()) {
       setProcessingOverlay(true, "Finalizing your order. Please wait...");
@@ -1639,6 +1860,23 @@ function handleCheckout(products) {
       validateDiscountCodeUi();
     });
 
+
+    [
+      "name",
+      "email",
+      "phone",
+      "address",
+      "city",
+      "notes",
+      "affiliate-code",
+      "discount-code",
+      "payment-method",
+    ].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const eventName = id === "payment-method" ? "change" : "input";
+      el.addEventListener(eventName, saveCheckoutDraft);
+    });
     if (discountBtn && discountInput) {
       discountBtn.addEventListener("click", async () => {
         const code = discountInput.value.trim();
@@ -1673,6 +1911,12 @@ function handleCheckout(products) {
     }
   });
 })();
+
+
+
+
+
+
 
 
 

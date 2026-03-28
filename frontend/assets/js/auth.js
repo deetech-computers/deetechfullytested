@@ -48,6 +48,7 @@ const clearToken = () => localStorage.removeItem("token");
 
   function renderMobileBottomNav() {
     const path = location.pathname.toLowerCase();
+    if (path.includes("account.html") || path.includes("thankyou.html")) return;
     if (path.includes("/admin/")) return;
     if (document.getElementById("mobileBottomNav")) return;
 

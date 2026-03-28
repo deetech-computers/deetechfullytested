@@ -16,7 +16,22 @@
   <link rel="stylesheet" href="assets/css/footer.css">
   <link rel="stylesheet" href="assets/css/checkout.css">
   <style>
-    .checkout-page { padding: 2rem 0; }
+    .checkout-page { padding: 2rem 0 1rem; overflow-x: clip; }
+    html, body {
+      height: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .checkout-page { flex: 1 0 auto; }
+    .footer {
+      margin-top: auto !important;
+      flex-shrink: 0;
+    }
     .checkout-grid {
       display: grid;
       grid-template-columns: 1fr 360px;
@@ -238,7 +253,7 @@
     }
     .payment-logo-image--mtn { transform: scale(1.12); }
     .payment-logo-image--telecel { transform: scale(1.18); }
-    .payment-logo-image--hubtel { transform: scale(0.92); }
+.payment-logo-image--hubtel { transform: scale(0.90); object-position: center; }
     .payment-logo-image--bank { transform: scale(1.02); }
     .payment-name {
       font-size: 0.93rem;
@@ -362,6 +377,61 @@
       flex: 0 0 auto;
     }
     .sum-row.total { font-weight:700; border-top:1px solid #eee; padding-top:.6rem; }
+    .affiliate-impact {
+      display: none;
+      margin: 10px 0 8px;
+      padding: 12px;
+      border: 1px solid #d5e3fb;
+      background: #eff6ff;
+      color: #1e293b;
+    }
+    .affiliate-impact-main {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 10px 0 12px;
+    }
+    .affiliate-impact-icon {
+      width: 20px;
+      height: 20px;
+      color: #2563eb;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .affiliate-impact-main p {
+      margin: 0;
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+    .affiliate-impact-main strong {
+      color: #1d4ed8;
+      font-weight: 700;
+    }
+    .affiliate-impact-metrics {
+      background: #ffffff;
+      border: 1px solid #cddcf7;
+      padding: 10px 12px;
+      display: grid;
+      gap: 6px;
+    }
+    .affiliate-impact-metrics .metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.92rem;
+      gap: 10px;
+    }
+    .affiliate-impact-metrics .metric + .metric {
+      border-top: 1px dashed #c8d7f3;
+      padding-top: 6px;
+    }
+    .affiliate-impact-metrics .metric-label {
+      color: #475569;
+    }
+    .affiliate-impact-metrics .metric-value {
+      color: #0f172a;
+      font-weight: 700;
+    }
 
     .msg { display:none; margin-top:1rem; border-radius:0; padding:1rem; }
     .msg.success { display:block; background:#e8f7ed; color:#0f6b2b; }
@@ -449,8 +519,12 @@
       }
 
       .checkout-stepper {
+        display: flex;
         gap: 8px;
         margin-bottom: 10px;
+      }
+      .checkout-step-wrap {
+        margin-top: 0;
       }
       .checkout-stepper::before {
         left: 10px;
@@ -465,6 +539,12 @@
       .checkout-stepper-item p {
         font-size: .64rem;
         letter-spacing: .02em;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: clip;
+        width: 100%;
+        min-height: 2.1em;
+        line-height: 1.05;
       }
 
       .checkout-step-panel,
@@ -492,7 +572,7 @@
         height: 28px;
         padding: 0;
       }
-      .payment-name {
+.payment-name {
         font-size: .74rem;
         line-height: 1.1;
         white-space: nowrap;
@@ -522,6 +602,138 @@
     @media(max-width: 520px) {
       .payment-options { grid-template-columns: 1fr; }
     }
+  
+    .checkout-grid,
+    .checkout-stepper,
+    .checkout-step-wrap {
+      max-width: 100%;
+      overflow-x: clip;
+    }
+    .checkout-stepper-item,
+    .payment-option,
+    .payment-name {
+      min-width: 0;
+    }
+    .checkout-stepper-item p {
+      display: block;
+      width: 100%;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .checkout-mobile-back {
+      display: none;
+    }
+    .checkout-mobile-actionbar {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      body.checkout-mobile-flow .checkout-top-actions {
+        display: none !important;
+      }
+      body.checkout-mobile-flow .checkout-stepper {
+        display: flex !important;
+      }
+      body.checkout-mobile-flow .checkout-step-wrap {
+        margin-top: 0;
+      }
+      body.checkout-mobile-flow .checkout-page {
+        padding-bottom: 132px !important;
+      }
+      body.checkout-mobile-flow .footer {
+        display: none !important;
+      }
+      body.checkout-mobile-flow .site-header .nav-logo,
+      body.checkout-mobile-flow .site-header .nav-menu,
+      body.checkout-mobile-flow .site-header .nav-icons,
+      body.checkout-mobile-flow .site-header .mobile-nav-icons {
+        display: none !important;
+      }
+      body.checkout-mobile-flow .site-header .nav-container {
+        justify-content: flex-start;
+        align-items: center;
+        min-height: 58px;
+        height: 58px;
+        padding: 0 14px;
+      }
+      body.checkout-mobile-flow .checkout-mobile-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 700;
+        font-size: 1.02rem;
+        line-height: 1;
+        color: #0f172a;
+        text-decoration: none;
+      }
+      body.checkout-mobile-flow .checkout-mobile-back::first-letter {
+        font-size: 1.45em;
+        font-weight: 800;
+        line-height: 1;
+        margin-right: 1px;
+      }
+      body.checkout-mobile-flow .checkout-mobile-actionbar {
+        display: block;
+        position: fixed;
+        left: 0;
+        right: 0;
+        transform: none;
+        bottom: 0;
+        width: 100%;
+        z-index: 45;
+        background: #ffffff;
+        border-top: 1px solid #dbe3f1;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 8px 10px 10px;
+        margin: 0;
+      }
+      .checkout-mobile-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+      .checkout-mobile-total {
+        font-size: 0.85rem;
+        color: #334155;
+        line-height: 1.2;
+      }
+      .checkout-mobile-total strong {
+        display: block;
+        color: #0f172a;
+        font-size: 1.12rem;
+        margin-top: 2px;
+      }
+      .checkout-mobile-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 8px;
+        border: 1px solid #86efac;
+        background: #f0fdf4;
+        color: #166534;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+      .checkout-mobile-primary {
+        width: 100%;
+        border: none;
+        background: #1d4ed8;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 700;
+        padding: 11px 12px;
+        cursor: pointer;
+      }
+      body.checkout-mobile-flow .checkout-step-actions,
+      body.checkout-mobile-flow #place-order-btn {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body class="page-loading">
@@ -538,7 +750,7 @@
   <!-- Main Checkout Section -->
   <main class="container checkout-page">
     <h1 class="page-title">Checkout</h1>
-    <div class="checkout-top-actions">
+    <div class="checkout-top-actions" style="display:none;">
       <a href="products.html" class="checkout-back-link">&larr; Back to products</a>
     </div>
 
@@ -591,7 +803,7 @@
             <span class="payment-name">Telecel Cash</span>
           </button>
           <button type="button" class="payment-option" data-method="hubtel" aria-pressed="false">
-            <span class="payment-logo payment-logo--hubtel" aria-hidden="true"><img class="payment-logo-image payment-logo-image--hubtel" src="assets/img/hubtel%20logo.webp" alt=""></span>
+            <span class="payment-logo payment-logo--hubtel" aria-hidden="true"><img class="payment-logo-image payment-logo-image--hubtel" src="assets/img/hubtel%20logo.png" alt=""></span>
             <span class="payment-name">Hubtel</span>
           </button>
           <button type="button" class="payment-option" data-method="bank" aria-pressed="false">
@@ -652,12 +864,41 @@
           <span id="checkoutAffiliateLabel">Affiliate Earning</span>
           <span id="checkoutAffiliateAmount">GHC 0.00</span>
         </div>
+        <div class="affiliate-impact" id="checkoutAffiliateImpact" style="display:none;">
+          <div class="affiliate-impact-main">
+            <svg class="affiliate-impact-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M20 7h-2.18A3 3 0 0 0 18 6a3 3 0 0 0-5-2.22A3 3 0 0 0 8 6c0 .34.06.68.18 1H6a2 2 0 0 0-2 2v2h1v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8h1V9a2 2 0 0 0-2-2ZM9 6a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm4 0a1 1 0 1 1 2 0 1 1 0 0 1-2 0Zm4 13H7v-8h4v8h2v-8h4v8Z"/>
+            </svg>
+            <p>
+              Thank you for supporting <strong id="checkoutAffiliateSupportName">this affiliate</strong>!
+              They'll receive <strong id="checkoutAffiliateSupportAmount">GHC 0.00</strong> commission once your order is confirmed.
+            </p>
+          </div>
+          <div class="affiliate-impact-metrics">
+            <div class="metric">
+              <span class="metric-label">Referral count</span>
+              <span class="metric-value" id="checkoutAffiliateReferrals">This will be their 1 referral</span>
+            </div>
+            <div class="metric">
+              <span class="metric-label">Total earned</span>
+              <span class="metric-value" id="checkoutAffiliateTotalEarned">GHC 0.00</span>
+            </div>
+          </div>
+        </div>
         <div class="sum-row"><span>Shipping</span><span id="shipping">FREE Nationwide Delivery</span></div>
         <div class="sum-row total"><span>Total</span><span id="order-total">GHC 0.00</span></div>
       </aside>
     </div>
   </main>
 
+
+  <section class="container checkout-mobile-actionbar" id="checkoutMobileBar" aria-live="polite">
+    <div class="checkout-mobile-meta">
+      <div class="checkout-mobile-total">Total Amount:<strong id="checkoutMobileTotal">GHC 0.00</strong></div>
+      <div class="checkout-mobile-status" id="checkoutMobileStatus">Ready to continue</div>
+    </div>
+    <button type="button" class="checkout-mobile-primary" id="checkoutMobilePrimaryBtn">Continue to Payment</button>
+  </section>
   <!-- Footer -->
     <footer class="footer">
     <h2 class="sr-only">Footer Navigation</h2>
@@ -758,6 +999,16 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
 
 
 
