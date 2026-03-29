@@ -260,22 +260,20 @@
 
     const serverItems = await fetchServerCart();
 
-    if (!serverItems || serverItems.length === 0) {
-      if (localCart.length > 0) {
-        await syncCartToServer(localCart);
-      }
+    // Source of truth rule:
+    // - If local cart has items, keep local state and sync server to it.
+    // - This prevents deleted items from "coming back" from stale server carts.
+    if (localCart.length > 0) {
+      await syncCartToServer(localCart);
       return localCart;
     }
 
-    if (!localCart.length) {
+    if (serverItems && serverItems.length > 0) {
       setLocalCart(serverItems);
       return serverItems;
     }
 
-    const merged = mergeCartItems(serverItems, localCart);
-    setLocalCart(merged);
-    await syncCartToServer(merged);
-    return merged;
+    return [];
   }
 
   function scheduleSync(cart) {
@@ -305,6 +303,15 @@
     });
     const normalized = Array.from(map.values());
     setLocalCart(normalized);
+
+    // Hard guarantee: when cart is emptied, sync immediately to server
+    // so removed items cannot reappear after an instant refresh.
+    if (!normalized.length) {
+      clearTimeout(syncTimer);
+      await syncCartToServer([]);
+      return;
+    }
+
     scheduleSync(normalized);
   }
 

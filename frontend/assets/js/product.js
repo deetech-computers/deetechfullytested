@@ -201,7 +201,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
 
-    saveCart(cart);
+    if (window.cart && typeof window.cart.saveCart === "function") {
+        window.cart.saveCart(cart);
+      } else {
+        saveCart(cart);
+      }
     document.dispatchEvent(new Event("cart-updated"));
     showToast?.(`[${product.name}] added to cart`, "success");
   }
@@ -861,7 +865,11 @@ document.addEventListener("DOMContentLoaded", () => {
             countInStock: stock,
           });
         }
+        if (window.cart && typeof window.cart.saveCart === "function") {
+        window.cart.saveCart(cart);
+      } else {
         saveCart(cart);
+      }
         updateCartUI();
         showToast?.(`[${product.name}] added to cart`, "success");
       });
@@ -872,7 +880,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showToast?.("You can't add more than available stock", "info");
           return;
         }
-        saveCart([{
+        (window.cart && typeof window.cart.saveCart === "function" ? window.cart.saveCart : saveCart)([{
           _id: product._id,
           productId: product._id,
           name: product.name,

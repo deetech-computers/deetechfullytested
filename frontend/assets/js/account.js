@@ -500,10 +500,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
           const getCart = typeof window.CONFIG?.loadCart === "function"
             ? window.CONFIG.loadCart
-            : () => JSON.parse(localStorage.getItem("deetech-cart") || "[]");
+            : () => JSON.parse(localStorage.getItem("cart") || "[]");
           const setCart = typeof window.CONFIG?.saveCart === "function"
             ? window.CONFIG.saveCart
-            : (cart) => localStorage.setItem("deetech-cart", JSON.stringify(cart));
+            : (cart) => localStorage.setItem("cart", JSON.stringify(cart));
 
           const cart = getCart();
           const stock = normalizeWishlistStock(product);

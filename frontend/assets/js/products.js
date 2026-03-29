@@ -1,4 +1,4 @@
-﻿// assets/js/products.js
+// assets/js/products.js
 document.addEventListener("DOMContentLoaded", () => {
   const {
     API_BASE_PRODUCTS,
@@ -421,7 +421,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function setCart(next) {
     cart = next;
-    if (typeof saveCart === "function") saveCart(cart);
+    if (window.cart && typeof window.cart.saveCart === "function") {
+      window.cart.saveCart(cart);
+    } else if (typeof saveCart === "function") {
+      saveCart(cart);
+    }
   }
 
   function updateCartUI() {

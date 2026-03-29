@@ -54,8 +54,8 @@
   }
 
   function addToCartFromWishlist(product) {
-    const getCart = typeof loadCart === "function" ? loadCart : () => JSON.parse(localStorage.getItem("deetech-cart") || "[]");
-    const setCart = typeof saveCart === "function" ? saveCart : (cart) => localStorage.setItem("deetech-cart", JSON.stringify(cart));
+    const getCart = typeof loadCart === "function" ? loadCart : () => JSON.parse(localStorage.getItem("cart") || "[]");
+    const setCart = typeof saveCart === "function" ? saveCart : (cart) => localStorage.setItem("cart", JSON.stringify(cart));
 
     const cart = getCart();
     const id = getProductId(product);
