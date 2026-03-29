@@ -218,6 +218,84 @@
     );
   }
 
+  function syncDashboardV2(stats, settings, referrals, currentTierText, thresholds) {
+    const delivered = Number(stats?.deliveredReferrals || 0);
+    const totalReferrals = Number(stats?.totalReferrals || 0);
+    const pendingReferrals = Number(stats?.pendingReferrals || 0);
+    const cancelledReferrals = Number(stats?.cancelledReferrals || 0);
+    const pendingCommission = Number(stats?.pendingCommission || 0);
+    const earnedCommission = Number(stats?.earnedCommission || 0);
+
+    const paidOutEl = document.getElementById("affiliatePaidOutValue");
+    if (paidOutEl) paidOutEl.textContent = money(earnedCommission);
+
+    const lifetimeEl = document.getElementById("affiliateLifetimeGenerated");
+    if (lifetimeEl) lifetimeEl.textContent = money(pendingCommission + earnedCommission);
+
+    const successRateEl = document.getElementById("affiliateSuccessRate");
+    if (successRateEl) {
+      const successRate = totalReferrals > 0 ? Math.round((delivered / totalReferrals) * 100) : 0;
+      successRateEl.textContent = `${successRate}%`;
+    }
+
+    const map = {
+      affiliateBreakTotal: totalReferrals,
+      affiliateBreakSuccess: delivered,
+      affiliateBreakPending: pendingReferrals,
+      affiliateBreakCancelled: cancelledReferrals,
+    };
+    Object.entries(map).forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = String(value);
+    });
+
+    const latestReferral = Array.isArray(referrals)
+      ? referrals
+          .slice()
+          .sort((a, b) => new Date(b?.createdAt || 0).getTime() - new Date(a?.createdAt || 0).getTime())[0]
+      : null;
+    const lastEl = document.getElementById("affiliateBreakLast");
+    if (lastEl) lastEl.textContent = latestReferral?.createdAt ? formatDate(latestReferral.createdAt) : "No referrals yet";
+
+    const tierCard = document.getElementById("affiliateTierValueCard");
+    if (tierCard) tierCard.textContent = currentTierText;
+    const tierChip = document.getElementById("affiliateCurrentTierChip");
+    if (tierChip) tierChip.textContent = currentTierText;
+
+    const rate = Number(settings?.defaultCommissionRate || 5);
+    const tierLead = document.getElementById("affiliateTierBenefitsLead");
+    if (tierLead) tierLead.textContent = `You're earning ${rate}% commission on every sale`;
+    const tierSub = document.getElementById("affiliateTierBenefitsSub");
+    if (tierSub) tierSub.textContent = `Active benefits: ${rate}% commission rate, Basic tracking.`;
+
+    const bronzeThreshold = Number(thresholds?.bronze || DEFAULT_THRESHOLDS.bronze);
+    const silverThreshold = Number(thresholds?.silver || DEFAULT_THRESHOLDS.silver);
+    const goldThreshold = Number(thresholds?.gold || DEFAULT_THRESHOLDS.gold);
+
+    const bronzeThresholdEl = document.getElementById("affiliateBronzeThreshold");
+    if (bronzeThresholdEl) bronzeThresholdEl.textContent = String(bronzeThreshold);
+    const silverThresholdEl = document.getElementById("affiliateSilverThreshold");
+    if (silverThresholdEl) silverThresholdEl.textContent = String(silverThreshold);
+    const goldThresholdEl = document.getElementById("affiliateGoldThreshold");
+    if (goldThresholdEl) goldThresholdEl.textContent = String(goldThreshold);
+
+    const progressFill = document.getElementById("affiliateTierProgressFill");
+    if (progressFill) {
+      const maxTarget = Math.max(goldThreshold, 1);
+      const percent = Math.min(100, Math.max(0, (delivered / maxTarget) * 100));
+      progressFill.style.width = `${percent}%`;
+    }
+
+    const bronzeStop = document.getElementById("affiliateBronzeStop");
+    if (bronzeStop) bronzeStop.classList.toggle("active", delivered >= bronzeThreshold);
+    const silverStop = document.getElementById("affiliateSilverStop");
+    if (silverStop) silverStop.classList.toggle("active", delivered >= silverThreshold);
+    const goldStop = document.getElementById("affiliateGoldStop");
+    if (goldStop) goldStop.classList.toggle("active", delivered >= goldThreshold);
+
+    const nextNote = document.getElementById("affiliateTierNextNote");
+    if (nextNote) nextNote.textContent = tierProgressHint(delivered, thresholds);
+  }
   function renderDashboard(data) {
     const affiliate = data?.affiliate || {};
     const stats = data?.stats || {};
@@ -228,7 +306,8 @@
     updateProgramPoints(settings);
     currentCode = text(affiliate.code);
     if (els.codeValue) els.codeValue.textContent = currentCode || "-";
-    if (els.tierValue) els.tierValue.textContent = tierLabel(affiliate.tier);
+    const currentTierText = tierLabel(affiliate.tier);
+    if (els.tierValue) els.tierValue.textContent = currentTierText;
     if (els.tierHint) {
       els.tierHint.textContent = tierProgressHint(stats.deliveredReferrals, thresholds);
     }
@@ -239,6 +318,8 @@
     if (els.cancelledReferrals) els.cancelledReferrals.textContent = String(stats.cancelledReferrals || 0);
     if (els.pendingCommission) els.pendingCommission.textContent = money(stats.pendingCommission);
     if (els.earnedCommission) els.earnedCommission.textContent = money(stats.earnedCommission);
+
+    syncDashboardV2(stats, settings, referrals, currentTierText, thresholds);
 
     renderAnalytics(stats, referrals);
     renderHistory(referrals);
@@ -350,3 +431,5 @@
     loadProfile();
   });
 })();
+
+

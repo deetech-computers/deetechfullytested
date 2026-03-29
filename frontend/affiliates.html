@@ -289,8 +289,7 @@
       <button class="btn" id="affiliateRegisterBtn" type="button">Generate My Affiliate Code</button>
       <div class="affiliate-message" id="affiliateJoinMessage"></div>
     </section>
-
-    <section class="affiliate-card affiliate-hidden" id="affiliateDashboardCard">
+    <section class="affiliate-card affiliate-hidden affiliate-dashboard-v2" id="affiliateDashboardCard">
       <div class="affiliate-dashboard-header">
         <div>
           <h2>My Affiliate Dashboard</h2>
@@ -305,38 +304,95 @@
         <div class="affiliate-share-hint">Customers can enter this at checkout.</div>
       </div>
 
-      <div class="affiliate-stats-grid">
-        <article class="affiliate-stat">
+      <section class="affiliate-journey-card-v2">
+        <div class="affiliate-journey-top">
+          <div class="affiliate-journey-title-wrap">
+            <h3><span id="affiliateTierValue">Starter</span> Tier</h3>
+            <p id="affiliateTierHint">Refer more products to get promoted.</p>
+          </div>
+          <div class="affiliate-journey-chip" id="affiliateCurrentTierChip">Starter</div>
+        </div>
+
+        <div class="affiliate-journey-earned" id="affiliateEarnedCommission">GHC 0.00</div>
+
+        <div class="affiliate-tier-progress">
+          <div class="affiliate-tier-progress-fill" id="affiliateTierProgressFill"></div>
+        </div>
+        <div class="affiliate-tier-track">
+          <div class="affiliate-tier-stop active">
+            <span class="dot"></span>
+            <span class="label">Starter</span>
+          </div>
+          <div class="affiliate-tier-stop" id="affiliateBronzeStop">
+            <span class="dot bronze"></span>
+            <span class="label">Bronze (<span id="affiliateBronzeThreshold">8</span>)</span>
+          </div>
+          <div class="affiliate-tier-stop" id="affiliateSilverStop">
+            <span class="dot silver"></span>
+            <span class="label">Silver (<span id="affiliateSilverThreshold">18</span>)</span>
+          </div>
+          <div class="affiliate-tier-stop" id="affiliateGoldStop">
+            <span class="dot gold"></span>
+            <span class="label">Gold (<span id="affiliateGoldThreshold">35</span>)</span>
+          </div>
+        </div>
+      </section>
+
+      <div class="affiliate-stats-grid affiliate-stats-grid-v2">
+        <article class="affiliate-stat affiliate-stat-v2 blue">
           <h3>Total Referrals</h3>
           <strong id="affiliateTotalReferrals">0</strong>
+          <small><span id="affiliateDeliveredReferrals">0</span> successful • <span id="affiliatePendingReferrals">0</span> pending</small>
         </article>
-        <article class="affiliate-stat">
-          <h3>Pending Referrals</h3>
-          <strong id="affiliatePendingReferrals">0</strong>
-        </article>
-        <article class="affiliate-stat">
-          <h3>Delivered Referrals</h3>
-          <strong id="affiliateDeliveredReferrals">0</strong>
-        </article>
-        <article class="affiliate-stat">
-          <h3>Cancelled Referrals</h3>
-          <strong id="affiliateCancelledReferrals">0</strong>
-        </article>
-        <article class="affiliate-stat">
+        <article class="affiliate-stat affiliate-stat-v2 orange">
           <h3>Pending Commission</h3>
           <strong id="affiliatePendingCommission">GHC 0.00</strong>
+          <small>Awaiting order completion</small>
         </article>
-        <article class="affiliate-stat">
-          <h3>Earned Commission</h3>
-          <strong id="affiliateEarnedCommission">GHC 0.00</strong>
+        <article class="affiliate-stat affiliate-stat-v2 green">
+          <h3>Total Paid Out</h3>
+          <strong id="affiliatePaidOutValue">GHC 0.00</strong>
+          <small>Approved commissions</small>
+        </article>
+        <article class="affiliate-stat affiliate-stat-v2 cyan">
+          <h3>Lifetime Generated</h3>
+          <strong id="affiliateLifetimeGenerated">GHC 0.00</strong>
+          <small>Pending + paid out</small>
+        </article>
+        <article class="affiliate-stat affiliate-stat-v2 amber">
+          <h3>Cancelled Referrals</h3>
+          <strong id="affiliateCancelledReferrals">0</strong>
+          <small>Orders not completed</small>
+        </article>
+        <article class="affiliate-stat affiliate-stat-v2 indigo">
+          <h3>Success Rate</h3>
+          <strong id="affiliateSuccessRate">0%</strong>
+          <small>Referral conversion</small>
         </article>
       </div>
 
-      <div class="affiliate-tier-box">
-        <div>
-          <h3>Current Tier: <span id="affiliateTierValue">Starter</span></h3>
-          <p id="affiliateTierHint">Refer more products to get promoted.</p>
-        </div>
+      <div class="affiliate-summary-panels">
+        <section class="affiliate-summary-card">
+          <h3>Referral Breakdown</h3>
+          <div class="affiliate-breakdown-row"><span>Total Referrals</span><strong id="affiliateBreakTotal">0</strong></div>
+          <div class="affiliate-breakdown-row"><span>Successful Referrals</span><strong id="affiliateBreakSuccess">0</strong></div>
+          <div class="affiliate-breakdown-row"><span>Pending Approval</span><strong id="affiliateBreakPending">0</strong></div>
+          <div class="affiliate-breakdown-row"><span>Cancelled Referrals</span><strong id="affiliateBreakCancelled">0</strong></div>
+          <div class="affiliate-breakdown-row"><span>Last Referral</span><strong id="affiliateBreakLast">No referrals yet</strong></div>
+        </section>
+
+        <section class="affiliate-summary-card">
+          <h3>Your Tier Benefits</h3>
+          <div class="affiliate-benefit-box">
+            <div class="icon"></div>
+            <div>
+              <h4><span id="affiliateTierValueCard">Starter</span> Tier</h4>
+              <p id="affiliateTierBenefitsLead">You're earning 5% commission on every sale</p>
+              <small id="affiliateTierBenefitsSub">Active benefits: 5% commission rate, Basic tracking</small>
+            </div>
+          </div>
+          <div class="affiliate-next-tier-note" id="affiliateTierNextNote">Unlock Bronze tier at 8 delivered referrals.</div>
+        </section>
       </div>
 
       <div class="affiliate-analytics-grid">
@@ -370,8 +426,7 @@
           No referrals yet. Share your code to start earning.
         </div>
       </div>
-    </section>
-  </main>
+    </section>  </main>
 
   <footer class="footer">
     <h2 class="sr-only">Footer Navigation</h2>
@@ -458,6 +513,7 @@
   <script src="assets/js/affiliates.js"></script>
 </body>
 </html>
+
 
 
 
