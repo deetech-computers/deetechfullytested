@@ -180,35 +180,68 @@
           <div id="accountAffiliateJoinCard" class="account-affiliate-card account-hidden">
             <h2>Join Our Affiliate Program</h2>
             <p>Create your referral code to start earning commission on completed orders.</p>
+            <ul class="account-affiliate-quick-benefits">
+              <li>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2 3 6v6c0 5.2 3.8 9.9 9 11 5.2-1.1 9-5.8 9-11V6l-9-4Zm0 2.1 6.8 3v4.9c0 4.1-2.8 7.9-6.8 9-4-1.1-6.8-4.9-6.8-9V7.1l6.8-3Z"/></svg>
+                </span>
+                5% base commission on confirmed sales
+              </li>
+              <li>
+                <span class="icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4V6Zm0 5h10v2H4v-2Zm0 5h7v2H4v-2Zm12.5-1.5 3 3 4.5-5.2 1.5 1.3-5.9 6.8-4.6-4.5 1.5-1.4Z"/></svg>
+                </span>
+                Tier rewards as your delivered referrals grow
+              </li>
+            </ul>
             <button type="button" class="account-save-btn" id="accountAffiliateJoinBtn">Create Affiliate Code</button>
             <div id="accountAffiliateJoinMessage" class="account-affiliate-message"></div>
           </div>
 
           <div id="accountAffiliateDashboardCard" class="account-affiliate-card account-hidden">
+            <div class="account-affiliate-overview">
+              <div class="account-affiliate-overview-top">
+                <h2><span id="accountAffiliateTierHeading">Starter</span> Tier</h2>
+                <span class="account-affiliate-tier-chip" id="accountAffiliateTierChip">Starter</span>
+              </div>
+              <p id="accountAffiliateTierHint">Keep referring to unlock higher rewards.</p>
+            </div>
+
             <div class="account-affiliate-grid">
-              <div class="account-affiliate-stat">
+              <div class="account-affiliate-stat blue">
                 <span class="account-affiliate-label">Affiliate Code</span>
                 <strong id="accountAffiliateCode">-</strong>
               </div>
-              <div class="account-affiliate-stat">
+              <div class="account-affiliate-stat indigo">
                 <span class="account-affiliate-label">Tier</span>
                 <strong id="accountAffiliateTier">Starter</strong>
               </div>
-              <div class="account-affiliate-stat">
+              <div class="account-affiliate-stat blue">
                 <span class="account-affiliate-label">Total Referrals</span>
                 <strong id="accountAffiliateTotalReferrals">0</strong>
               </div>
-              <div class="account-affiliate-stat">
+              <div class="account-affiliate-stat amber">
                 <span class="account-affiliate-label">Pending Referrals</span>
                 <strong id="accountAffiliatePendingReferrals">0</strong>
               </div>
-              <div class="account-affiliate-stat">
+              <div class="account-affiliate-stat green">
                 <span class="account-affiliate-label">Earned Commission</span>
                 <strong id="accountAffiliateEarnedCommission">GHC 0.00</strong>
               </div>
-              <div class="account-affiliate-stat">
+              <div class="account-affiliate-stat orange">
                 <span class="account-affiliate-label">Pending Commission</span>
                 <strong id="accountAffiliatePendingCommission">GHC 0.00</strong>
+              </div>
+            </div>
+
+            <div class="account-affiliate-mini-summary">
+              <div class="item">
+                <span class="title">Estimated Lifetime</span>
+                <strong id="accountAffiliateLifetime">GHC 0.00</strong>
+              </div>
+              <div class="item">
+                <span class="title">Success Rate</span>
+                <strong id="accountAffiliateSuccessRate">0%</strong>
               </div>
             </div>
 
@@ -299,6 +332,9 @@
   </footer>
 </body>
 </html>
+
+
+
 
 
 

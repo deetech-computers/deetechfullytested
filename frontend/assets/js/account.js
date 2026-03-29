@@ -44,6 +44,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const affiliatePendingReferralsEl = document.getElementById("accountAffiliatePendingReferrals");
   const affiliateEarnedCommissionEl = document.getElementById("accountAffiliateEarnedCommission");
   const affiliatePendingCommissionEl = document.getElementById("accountAffiliatePendingCommission");
+  const affiliateTierHeadingEl = document.getElementById("accountAffiliateTierHeading");
+  const affiliateTierChipEl = document.getElementById("accountAffiliateTierChip");
+  const affiliateTierHintEl = document.getElementById("accountAffiliateTierHint");
+  const affiliateLifetimeEl = document.getElementById("accountAffiliateLifetime");
+  const affiliateSuccessRateEl = document.getElementById("accountAffiliateSuccessRate");
 
   const reviewEditor = document.getElementById("accountReviewEditor");
   const reviewIdInput = document.getElementById("accountReviewId");
@@ -854,6 +859,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadAccountInfo();
 });
+
 
 
 

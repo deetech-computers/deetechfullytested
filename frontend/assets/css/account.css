@@ -2433,3 +2433,194 @@ body.account-page-leaving .account-page {
     height: 26px;
   }
 }
+
+/* Account affiliate section polish (local dashboard summary) */
+#accountAffiliateSection .account-affiliate-card {
+  border: 1px solid #d4ddee;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+  padding: 1rem;
+}
+
+#accountAffiliateSection .account-affiliate-overview {
+  border: 1px solid #d7dfef;
+  border-top: 3px solid #b66b1f;
+  border-radius: 12px;
+  background: #f8fbff;
+  padding: 0.85rem;
+  margin-bottom: 0.8rem;
+}
+
+#accountAffiliateSection .account-affiliate-overview-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+#accountAffiliateSection .account-affiliate-overview h2 {
+  margin: 0;
+  font-size: clamp(1.05rem, 2vw, 1.28rem);
+  color: #0f172a;
+}
+
+#accountAffiliateSection .account-affiliate-tier-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.32rem 0.78rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  background: #1d4ed8;
+  color: #fff;
+}
+
+#accountAffiliateSection #accountAffiliateTierHint {
+  margin: 0.45rem 0 0;
+  color: #475569;
+  font-size: 0.9rem;
+}
+
+#accountAffiliateSection .account-affiliate-quick-benefits {
+  margin: 0 0 0.85rem;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+#accountAffiliateSection .account-affiliate-quick-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #334155;
+  font-size: 0.92rem;
+}
+
+#accountAffiliateSection .account-affiliate-quick-benefits .icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #eaf2ff;
+  color: #1d4ed8;
+  flex-shrink: 0;
+}
+
+#accountAffiliateSection .account-affiliate-quick-benefits .icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+#accountAffiliateSection .account-affiliate-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+#accountAffiliateSection .account-affiliate-stat {
+  border: 2px solid #d8e2f0;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.72rem;
+  display: grid;
+  gap: 0.32rem;
+}
+
+#accountAffiliateSection .account-affiliate-label {
+  display: flex;
+  align-items: center;
+  gap: 0.42rem;
+  font-size: 0.8rem;
+  color: #52637e;
+  margin: 0;
+}
+
+#accountAffiliateSection .account-affiliate-label::before {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 5px;
+  background: #2f63e0;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 10px 10px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 12h18'/%3E%3Cpath d='M12 3v18'/%3E%3C/svg%3E");
+}
+
+#accountAffiliateSection .account-affiliate-stat strong {
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  line-height: 1.15;
+}
+
+#accountAffiliateSection .account-affiliate-stat.blue { border-color: #2f63e0; }
+#accountAffiliateSection .account-affiliate-stat.indigo { border-color: #355fe0; }
+#accountAffiliateSection .account-affiliate-stat.amber { border-color: #c38a12; }
+#accountAffiliateSection .account-affiliate-stat.green { border-color: #169a6c; }
+#accountAffiliateSection .account-affiliate-stat.orange { border-color: #d98015; }
+
+#accountAffiliateSection .account-affiliate-stat.indigo .account-affiliate-label::before {
+  background-color: #355fe0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='8'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+}
+#accountAffiliateSection .account-affiliate-stat.amber .account-affiliate-label::before {
+  background-color: #c38a12;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3l7 4v10l-7 4-7-4V7l7-4z'/%3E%3C/svg%3E");
+}
+#accountAffiliateSection .account-affiliate-stat.green .account-affiliate-label::before {
+  background-color: #169a6c;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 7h18'/%3E%3Cpath d='M5 7l1 12h12l1-12'/%3E%3C/svg%3E");
+}
+#accountAffiliateSection .account-affiliate-stat.orange .account-affiliate-label::before {
+  background-color: #d98015;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M8 12h8'/%3E%3C/svg%3E");
+}
+
+#accountAffiliateSection .account-affiliate-mini-summary {
+  margin-top: 0.75rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+#accountAffiliateSection .account-affiliate-mini-summary .item {
+  border: 1px solid #d6e0ef;
+  border-radius: 10px;
+  padding: 0.62rem 0.72rem;
+  background: #f8fbff;
+}
+
+#accountAffiliateSection .account-affiliate-mini-summary .item .title {
+  display: block;
+  color: #5c6f88;
+  font-size: 0.8rem;
+  margin-bottom: 0.22rem;
+}
+
+#accountAffiliateSection .account-affiliate-mini-summary .item strong {
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+@media (max-width: 900px) {
+  #accountAffiliateSection .account-affiliate-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  #accountAffiliateSection .account-affiliate-overview-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #accountAffiliateSection .account-affiliate-grid,
+  #accountAffiliateSection .account-affiliate-mini-summary {
+    grid-template-columns: 1fr;
+  }
+}
